@@ -11,7 +11,8 @@ public interface ContratanteServices {
 	ContratanteDTO registrarContrantePorCpf(ContratanteDTO contratante) throws Exception; 
 	ContratanteDTO registrarContrantePorCnpj(ContratanteDTO contratanteCnpj) throws Exception;
 	ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId);
-	Double fazerAvaliacaoContratante(Double nota, Long contratanteId, Long prestadorId, StatusContrato status);
+	ContratoDTO visualizarContrato(Long contratoId);
+	Double fazerAvaliacaoContratante(Double nota, Long contratanteId, Long prestadorId);
 	List<ContratanteDTO> listarContrantesBemAvaliados();
 	
 	
