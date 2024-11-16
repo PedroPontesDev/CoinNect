@@ -1,0 +1,25 @@
+cors:
+  originPatterns:
+    - http://localhost:8080
+    - http://localhost:3000
+    
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_coinnect
+    username: root
+    password: 35828889Ped
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+spring-doc:
+  pathsToMatch: 
+    - /api/**/v1/**
+  swagger-ui:
+    use-rooth-path: true
+  
