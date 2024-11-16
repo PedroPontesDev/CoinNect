@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "TIPO_USUARIO")
 @Table(name = "tb_usuarios")
@@ -47,6 +49,10 @@ public abstract class Usuario {
 		this.endereco = endereco;
 	}
 
+	public Usuario() {
+		
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}

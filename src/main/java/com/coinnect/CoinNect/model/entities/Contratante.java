@@ -1,12 +1,21 @@
 package com.coinnect.CoinNect.model.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_contratante")
+@DiscriminatorValue(value = "CONTRATANTE")
 public class Contratante extends Usuario {
 
+	@Id
+	@GeneratedValue(strategy =GenerationType.IDENTITY )
+	private Long id;
 	private String cpf;
 	private String cnpj;
 	
@@ -23,6 +32,10 @@ public class Contratante extends Usuario {
 		this.avalicao = avalicao;
 	}
 
+	public Contratante() {
+		
+	}
+	
 	public String getCpf() {
 		return cpf;
 	}
