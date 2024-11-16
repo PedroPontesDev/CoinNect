@@ -1,8 +1,8 @@
 package com.coinnect.CoinNect.services.impl;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
@@ -10,15 +10,27 @@ import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.model.entities.Contratante;
 import com.coinnect.CoinNect.model.enums.StatusContrato;
 import com.coinnect.CoinNect.model.mapper.MyMapper;
+import com.coinnect.CoinNect.repositories.ContratanteRepositories;
+import com.coinnect.CoinNect.repositories.ContratoRepositories;
+import com.coinnect.CoinNect.repositories.PrestadorRepositories;
 import com.coinnect.CoinNect.services.ContratanteServices;
 
 public class ContratanteServicesImpl implements ContratanteServices {
 
-	// IMPLEEMENTAR REPOSITORIO DE CONTRATANTE
+	@Autowired
+	private ContratanteRepositories contratanteRepository;
 
-	// IMPLEMENTAR REPOSITORIO DE PRESTADOR DE SERVIÇOS
+	@Autowired
+	private PrestadorRepositories prestadorRepository;
 
-	// IMPLEMENTAR REPOSITORIO DE CONTRATOS
+	@Autowired
+	private ContratoRepositories contratoRepository;
+
+	@Autowired
+	private CnpjValidatorServices cnpjValidator;
+	
+	@Autowired
+	private ContratoServicesImpl contratoServices;
 
 	@Value(value = "${receitaws.token}")
 	private String receitaWsToken;
@@ -33,25 +45,20 @@ public class ContratanteServicesImpl implements ContratanteServices {
 
 	@Override
 	public ContratanteDTO registrarContrantePorCnpj(ContratanteDTO contratanteCnpj) throws Exception {
-		// Regex para validar CNPJ com e sem máscara
-		String cnpjRegex = "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$";
-		String cnpjSemMascaraRegex = "^\\d{14}$";
-
-		// Validação do formato do CNPJ
-		if (contratanteCnpj.getCnpj() == null || (!Pattern.matches(cnpjRegex, contratanteCnpj.getCnpj())
-				&& !Pattern.matches(cnpjSemMascaraRegex, contratanteCnpj.getCnpj()))) {
-			throw new Exception("CNPJ inválido! O CNPJ deve estar no formato correto.");
-		} else if (contratanteCnpj.getCpf() != null) {
-			throw new Exception("Você está fazendo um cadastro com CNPJ, CPF não é válido!");
+		boolean cnpjValido = cnpjValidator.validarCnpj(contratanteCnpj.getCnpj());
+		if(!cnpjValido) {
+			throw new Exception("Cnpj não pode ser confirmado!");
+		} else if(contratanteCnpj.getCpf() != null) {
+			throw new Exception("Erro, cadastro foi escolhido como CNPJ!");
 		}
-		
-		return null;
+		var contratante = MyMapper.parseObject(contratanteCnpj, Contratante.class);
+		contratanteRepository.save(contratante);
+		return MyMapper.parseObject(contratante, ContratanteDTO.class);
 
 	}
 
 	@Override
 	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -1,11 +1,14 @@
 package com.coinnect.CoinNect.model.entities;
 
-import jakarta.persistence.Column;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,28 +17,39 @@ import jakarta.persistence.Table;
 public class Contratante extends Usuario {
 
 	@Id
-	@GeneratedValue(strategy =GenerationType.IDENTITY )
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String cpf;
 	private String cnpj;
-	
+
 	private final Double AVALICAO_MAXIMA = 5.0;
-	
+
 	private Double avalicao;
-	
+
+	@OneToMany(mappedBy = "contratante")
+	private Set<Contrato> contratos = new HashSet<>();
 
 	public Contratante(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
-			String cpf, String cnpj, Double avalicao) {
+			String cpf, String cnpj, Double avalicao, Set<Contrato> contratos) {
 		super(id, firstName, lastName, email, telephone, endereco);
 		this.cpf = cpf;
 		this.cnpj = cnpj;
 		this.avalicao = avalicao;
+		this.contratos = contratos;
 	}
 
 	public Contratante() {
-		
+
 	}
-	
+
+	public Set<Contrato> getContratos() {
+		return contratos;
+	}
+
+	public void setContratos(Set<Contrato> contratos) {
+		this.contratos = contratos;
+	}
+
 	public String getCpf() {
 		return cpf;
 	}
@@ -153,11 +167,5 @@ public class Contratante extends Usuario {
 	public void setAvalicao(Double avalicao) {
 		this.avalicao = avalicao;
 	}
-	
-	
-	
-	
-	
-	
 
 }
