@@ -9,7 +9,6 @@ import java.util.Objects;
 
 public class ContratanteDTO {
 
-    @NotNull(message = "O ID não pode ser nulo.")
     private Long id;
 
     @NotBlank(message = "O primeiro nome é obrigatório.")

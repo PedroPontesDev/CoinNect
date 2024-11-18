@@ -1,6 +1,7 @@
 package com.coinnect.CoinNect.services;
 
 import java.util.List;
+import java.util.Set;
 
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
@@ -12,7 +13,8 @@ public interface ContratanteServices {
 	ContratanteDTO registrarContrantePorCnpj(ContratanteDTO contratanteCnpj) throws Exception;
 	ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId);
 	ContratoDTO visualizarContrato(Long contratoId);
-	Double fazerAvaliacaoContratante(Double nota, Long contratanteId, Long prestadorId);
+	Double fazerAvaliacaoContratante(Double nota, Long contratanteId);
+	Set<ContratoDTO> verTodosContratos(Long contratanteId);
 	List<ContratanteDTO> listarContrantesBemAvaliados();
 	
 	

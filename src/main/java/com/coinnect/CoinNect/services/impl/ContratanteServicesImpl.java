@@ -6,19 +6,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.model.entities.Contratante;
-import com.coinnect.CoinNect.model.entities.Contrato;
-import com.coinnect.CoinNect.model.enums.StatusContrato;
 import com.coinnect.CoinNect.model.mapper.MyMapper;
 import com.coinnect.CoinNect.repositories.ContratanteRepositories;
 import com.coinnect.CoinNect.repositories.ContratoRepositories;
 import com.coinnect.CoinNect.repositories.PrestadorRepositories;
 import com.coinnect.CoinNect.services.ContratanteServices;
 
+@Service
 public class ContratanteServicesImpl implements ContratanteServices {
 
 	@Autowired
@@ -81,7 +81,7 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	}
 
 	@Override
-	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId, Long prestadorId) {
+	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

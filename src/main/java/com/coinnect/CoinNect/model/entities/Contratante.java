@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_contratante")
@@ -22,6 +23,7 @@ public class Contratante extends Usuario {
 	private String cpf;
 	private String cnpj;
 
+	@Transient
 	private final Double AVALICAO_MAXIMA = 5.0;
 
 	private Double avalicao;
@@ -150,12 +152,6 @@ public class Contratante extends Usuario {
 		return super.equals(obj);
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
-	}
-
 	public Double getAVALICAO_MAXIMA() {
 		return AVALICAO_MAXIMA;
 	}
@@ -167,5 +163,12 @@ public class Contratante extends Usuario {
 	public void setAvalicao(Double avalicao) {
 		this.avalicao = avalicao;
 	}
+	
+	@Override
+	public String toString() {
+		return "Contratante [id=" + id + ", cpf=" + cpf + ", cnpj=" + cnpj + ", AVALICAO_MAXIMA=" + AVALICAO_MAXIMA
+				+ ", avalicao=" + avalicao + ", contratos=" + contratos + "]";
+	}
 
+	
 }

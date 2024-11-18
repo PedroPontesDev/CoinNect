@@ -2,7 +2,7 @@ cors:
   originPatterns:
     - http://localhost:8080
     - http://localhost:3000
-    
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,13 +16,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-		
+
 receitaws:
-	 token: ${RECEITAWS_TOKEN}
+  token: ${RECEITAWS_TOKEN}
 
 spring-doc:
   pathsToMatch: 
     - /api/**/v1/**
   swagger-ui:
-    use-rooth-path: true
-  
+    use-root-path: true

@@ -2,11 +2,13 @@ package com.coinnect.CoinNect.services.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
+import com.coinnect.CoinNect.model.enums.StatusContrato;
 import com.coinnect.CoinNect.repositories.ContratoRepositories;
 import com.coinnect.CoinNect.services.ContratoServices;
 
@@ -65,6 +67,60 @@ public class ContratoServicesImpl implements ContratoServices {
 	public void deletarContrato(Long contratoId) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<ContratoDTO> procurarContratosPorStatus(StatusContrato status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean verificarExistenciaContrato(Long contratanteId, Long prestadorId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ContratoDTO atualizarContrato(Long contratoId, BigDecimal novoValor, String novosTermos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContratoDTO> procurarContratosVencidos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContratoDTO> procurarContratosPendentesDeAssinatura() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BigDecimal calcularTotalContratos(Long contratanteId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ContratoDTO renovarContrato(Long contratoId, LocalDate novaDataTermino) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void cancelarContrato(Long contratoId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ContratoDTO> procurarHistoricoAlteracoes(Long contratoId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
