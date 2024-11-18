@@ -128,16 +128,12 @@ public class Contratante extends Usuario {
 		super.setEndereco(endereco);
 	}
 
-	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return super.getId();
+		return id;
 	}
 
-	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
-		super.setId(id);
+		this.id = id;
 	}
 
 	@Override
@@ -163,12 +159,11 @@ public class Contratante extends Usuario {
 	public void setAvalicao(Double avalicao) {
 		this.avalicao = avalicao;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Contratante [id=" + id + ", cpf=" + cpf + ", cnpj=" + cnpj + ", AVALICAO_MAXIMA=" + AVALICAO_MAXIMA
 				+ ", avalicao=" + avalicao + ", contratos=" + contratos + "]";
 	}
 
-	
 }

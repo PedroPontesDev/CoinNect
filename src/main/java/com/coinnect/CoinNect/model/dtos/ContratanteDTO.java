@@ -1,14 +1,17 @@
 package com.coinnect.CoinNect.model.dtos;
 
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-import java.util.Objects;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContratanteDTO {
-
+	
     private Long id;
 
     @NotBlank(message = "O primeiro nome é obrigatório.")

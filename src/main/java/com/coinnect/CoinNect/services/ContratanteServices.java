@@ -11,11 +11,15 @@ public interface ContratanteServices {
 
 	ContratanteDTO registrarContrantePorCpf(ContratanteDTO contratante) throws Exception; 
 	ContratanteDTO registrarContrantePorCnpj(ContratanteDTO contratanteCnpj) throws Exception;
-	ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId);
-	ContratoDTO visualizarContrato(Long contratoId);
-	Double fazerAvaliacaoContratante(Double nota, Long contratanteId);
-	Set<ContratoDTO> verTodosContratos(Long contratanteId);
-	List<ContratanteDTO> listarContrantesBemAvaliados();
+	ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) throws Exception;
+	ContratoDTO visualizarContrato(Long contratoId) throws Exception;
+	Double fazerAvaliacaoContratante(Double nota, Long contratanteId) throws Exception;
+	Set<ContratoDTO> verTodosContratos(Long contratanteId) throws Exception;
+	List<ContratanteDTO> listarContrantesBemAvaliados() throws Exception;
+	List<ContratanteDTO> listarContrantesMalAvaliados() throws Exception;
+	List<ContratanteDTO> listarTodos() throws Exception;
+	ContratanteDTO findById(Long contratanteId) throws Exception;
+	
 	
 	
 }

@@ -1,5 +1,6 @@
 package com.coinnect.CoinNect.services.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,9 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
+import com.coinnect.CoinNect.exceptions.UnsoportedEvaluationException;
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.model.entities.Contratante;
+import com.coinnect.CoinNect.model.entities.Contrato;
+import com.coinnect.CoinNect.model.entities.Prestador;
+import com.coinnect.CoinNect.model.enums.StatusContrato;
 import com.coinnect.CoinNect.model.mapper.MyMapper;
 import com.coinnect.CoinNect.repositories.ContratanteRepositories;
 import com.coinnect.CoinNect.repositories.ContratoRepositories;
@@ -62,14 +67,27 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	}
 
 	@Override
-	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) {
-		return null;
+	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) throws Exception {
+		Contrato novoContrato = MyMapper.parseObject(ofertaContrato, Contrato.class);
+		Prestador prestador = prestadorRepository.findById(prestadorId)
+												 .orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID" + prestadorId));
+		if(novoContrato != null) {
+			novoContrato.setStatus(StatusContrato.OFERTADO);
+			novoContrato.setPrestador(prestador);
+			return MyMapper.parseObject(novoContrato, ContratoDTO.class);
+		} else {
+			throw new Exception("Erro ao criar contrato, verifique os dados fornecidos.");
+		}
+		
 	}
 
 	@Override
 	public List<ContratanteDTO> listarContrantesBemAvaliados() {
-		// TODO Auto-generated method stub
-		return null;
+		var bemAvaliados = contratanteRepository.findAll()
+												.stream()
+												.sorted(Comparator.comparingDouble(c -> ((Contratante) c).getAvalicao()).reversed())
+												.collect(Collectors.toList()); //Depois trocar por algum algoritmo como QuickSort ou usar JPQL
+		return MyMapper.parseListObjects(bemAvaliados, ContratanteDTO.class);
 	}
 
 	@Override
@@ -82,8 +100,17 @@ public class ContratanteServicesImpl implements ContratanteServices {
 
 	@Override
 	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) {
-		// TODO Auto-generated method stub
-		return null;
+		var contratante = contratanteRepository.findById(contratanteId)
+											   .orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID" + contratanteId));
+		
+		if(nota > contratante.getAVALICAO_MAXIMA()) {
+			throw new UnsoportedEvaluationException("Nota deve ser igual ou menor que 5.0");
+		} else {
+			contratante.setAvalicao(nota);
+			contratanteRepository.save(contratante);
+			return contratante.getAvalicao();
+		}
+		
 	}
 
 	public Set<ContratoDTO> verTodosContratos(Long contratanteId) {
@@ -95,6 +122,24 @@ public class ContratanteServicesImpl implements ContratanteServices {
 					.stream()
 					.map(contratos -> MyMapper.parseObject(contratos, ContratoDTO.class))
 					.collect(Collectors.toSet());
+	}
+
+	@Override
+	public List<ContratanteDTO> listarContrantesMalAvaliados() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContratanteDTO> listarTodos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ContratanteDTO findById(Long contratanteId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
