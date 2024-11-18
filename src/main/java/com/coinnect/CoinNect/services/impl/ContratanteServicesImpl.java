@@ -1,5 +1,6 @@
 package com.coinnect.CoinNect.services.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -37,9 +38,6 @@ public class ContratanteServicesImpl implements ContratanteServices {
 
 	@Autowired
 	private CnpjValidatorServices cnpjValidator;
-
-	@Autowired
-	private ContratoServicesImpl contratoServices;
 
 	@Value(value = "${receitaws.token}")
 	private String receitaWsToken;
@@ -91,25 +89,38 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	}
 
 	@Override
-	public ContratoDTO visualizarContrato(Long contratoId) {
+	public ContratoDTO visualizarContratosProprios(Long contratoId, Long contratanteId) throws Exception {
 		var contrato = contratoRepository.findById(contratoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com o ID" + contratoId));
-		return MyMapper.parseObject(contrato, ContratoDTO.class);
+		
+		var contratante = contratanteRepository.findById(contratanteId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com o ID" + contratanteId));;
+		
+		if(contrato.getContratante().equals(contratante)) return MyMapper.parseObject(contrato, ContratoDTO.class);
+		else {
+			throw new Exception("Este contrato não pertence ao contratante fornecido.");
+		}
 
 	}
 
 	@Override
-	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) {
+	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) { //Depois implementar um sistema mais robusto de avaliações criando entidade no BD chamada tb_avaliacoes
 		var contratante = contratanteRepository.findById(contratanteId)
 											   .orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID" + contratanteId));
 		
-		if(nota > contratante.getAVALICAO_MAXIMA()) {
+		if(nota > contratante.getAVALICAO_MAXIMA() && nota < 0.0) {
 			throw new UnsoportedEvaluationException("Nota deve ser igual ou menor que 5.0");
-		} else {
-			contratante.setAvalicao(nota);
-			contratanteRepository.save(contratante);
-			return contratante.getAvalicao();
 		}
+		
+		Double novaMedia;
+		if(contratante.getAvalicao() == null) {
+			novaMedia = nota;
+		} else {
+			novaMedia = (contratante.getAvalicao() + nota) / 2;
+			contratante.setAvalicao(novaMedia);
+			contratanteRepository.save(contratante);
+		}
+		return novaMedia;
 		
 	}
 
@@ -140,6 +151,25 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	public ContratanteDTO findById(Long contratanteId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<ContratoDTO> visualizarContratosAtivos(Long contratanteId) {
+		var contratante = contratanteRepository.findById(contratanteId)
+											   .orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com ID" + contratanteId));
+		
+		List<ContratoDTO> contratosAtivos = new ArrayList<>();
+		
+		for(Contrato contrato : contratante.getContratos()) {
+			if(contrato.getStatus() == StatusContrato.ATIVO) {
+				contratosAtivos.add(MyMapper.parseObject(contrato, ContratoDTO.class));
+			}
+		}
+		
+		if(contratosAtivos.isEmpty()) {
+		    throw new ResourceNotFoundException("Nenhum contrato ativo encontrado para este contratante.");
+		} return contratosAtivos;
+	
 	}
 
 }
