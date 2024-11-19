@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -30,7 +31,8 @@ public class Contratante extends Usuario {
 
 	@OneToMany(mappedBy = "contratante")
 	private Set<Contrato> contratos = new HashSet<>();
-
+	
+	
 	public Contratante(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
 			String cpf, String cnpj, Double avalicao, Set<Contrato> contratos) {
 		super(id, firstName, lastName, email, telephone, endereco);
