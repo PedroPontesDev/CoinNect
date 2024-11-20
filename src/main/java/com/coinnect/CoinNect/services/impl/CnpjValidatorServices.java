@@ -42,6 +42,7 @@ public class CnpjValidatorServices {
         if (response.getStatusCode().equals(HttpStatus.OK)) {
             String responseBody = response.getBody();           
             if (responseBody.contains("OK")) {
+            	System.out.println(responseBody);
             	return true;
                 } else {
                     return false; // CNPJ não está ativo

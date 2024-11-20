@@ -2,7 +2,9 @@ package com.coinnect.CoinNect.services;
 
 import java.util.List;
 
+import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.model.dtos.EnderecoDTO;
+import com.coinnect.CoinNect.model.dtos.PrestadorDTO;
 import com.coinnect.CoinNect.model.entities.Endereco;
 
 public interface EnderecoServices {
@@ -25,6 +27,7 @@ public interface EnderecoServices {
     EnderecoDTO buscarEnderecoPorCoordenadas(double latitude, double longitude);
     
     // Outras Regras de Negocio
-    
+    ContratanteDTO findContratanteByEndereco(String rua, Integer numero);
+    PrestadorDTO findPrestadorByEndereco(String rua, Integer numero);
     
 }

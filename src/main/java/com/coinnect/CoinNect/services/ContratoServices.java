@@ -11,7 +11,7 @@ public interface ContratoServices {
 
 	ContratoDTO criarNovoContrato(ContratoDTO contratoNovo);
 	ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId);
-	ContratoDTO aceitarContrato(Long contratanteId, Long prestadorId, Long contratoId);
+	ContratoDTO aceitarContrato(Long contratoId);
 	void negarContrato(Long contratanteId, Long prestadorId, Long contratoId);
 	ContratoDTO formalizarContrato(Long contratanteId, Long prestadorId, Long contratoId, String assinaturaPrestador,
 			String assinaturaContratante);

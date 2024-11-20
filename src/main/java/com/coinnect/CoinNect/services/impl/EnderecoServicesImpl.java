@@ -1,12 +1,19 @@
 package com.coinnect.CoinNect.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
+import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.model.dtos.EnderecoDTO;
+import com.coinnect.CoinNect.model.dtos.PrestadorDTO;
+import com.coinnect.CoinNect.model.entities.Contratante;
 import com.coinnect.CoinNect.model.entities.Endereco;
+import com.coinnect.CoinNect.model.mapper.MyMapper;
+import com.coinnect.CoinNect.repositories.ContratanteRepositories;
 import com.coinnect.CoinNect.repositories.EnderecoRepositories;
 import com.coinnect.CoinNect.services.EnderecoServices;
 
@@ -15,23 +22,39 @@ public class EnderecoServicesImpl implements EnderecoServices {
 
 	@Autowired
 	private EnderecoRepositories enderecoRepository;
+	
+	@Autowired
+	private ContratanteRepositories contratanteRepository;
 
 	@Override
 	public EnderecoDTO registrarNovoEndereco(EnderecoDTO novoEndereco) {
-		// TODO Auto-generated method stub
-		return null;
+		if(novoEndereco != null) {
+			var end = MyMapper.parseObject(novoEndereco, Endereco.class);
+			enderecoRepository.save(end);
+		} throw new ResourceNotFoundException("Endereco não pode ser nulo!");
 	}
 
 	@Override
 	public EnderecoDTO atualizarEnderecoExistente(EnderecoDTO update, Long enderecoExistente) {
-		// TODO Auto-generated method stub
-		return null;
+		var endExistente = enderecoRepository.findById(enderecoExistente);
+		if(endExistente != null) {
+			var end = endExistente.get();
+			end.setBairro(update.getBairro());
+			end.setRua(update.getRua());
+			end.setNumero(update.getNumero());
+			end.setLongitude(update.getLongitude());
+			end.setLatitude(update.getLatitude());
+			enderecoRepository.save(end);
+			return MyMapper.parseObject(end, EnderecoDTO.class);
+		} throw new ResourceNotFoundException("Não foi possivel atualizar endereço, verifique os dados fornecidos e tente novamente!");
 	}
 
 	@Override
 	public EnderecoDTO findById(Long enderecoId) {
-		// TODO Auto-generated method stub
-		return null;
+		var end = enderecoRepository.findById(enderecoId);
+		if(end.isPresent()) {
+			return MyMapper.parseObject(end, EnderecoDTO.class);
+		} throw new ResourceNotFoundException("Não foi possivel localizar o endereco com o ID" + enderecoId);
 	}
 
 	@Override
@@ -72,6 +95,21 @@ public class EnderecoServicesImpl implements EnderecoServices {
 
 	@Override
 	public EnderecoDTO buscarEnderecoPorCoordenadas(double latitude, double longitude) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ContratanteDTO findContratanteByEndereco(String rua, Integer numero) {
+		Optional<Contratante> contratante = contratanteRepository.findByEndereco(rua, numero);
+		if(contratante.isPresent()) {
+			var contratanteEntity = contratante.get();
+			return MyMapper.parseObject(contratanteEntity, ContratanteDTO.class);
+		} throw new ResourceNotFoundException("Não foi possivel localizar nenhum contrantate neste endereco!");
+	}
+
+	@Override
+	public PrestadorDTO findPrestadorByEndereco(String rua, Integer numero) {
 		// TODO Auto-generated method stub
 		return null;
 	}

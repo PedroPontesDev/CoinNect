@@ -7,9 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
+import com.coinnect.CoinNect.model.entities.Contrato;
 import com.coinnect.CoinNect.model.enums.StatusContrato;
+import com.coinnect.CoinNect.model.mapper.MyMapper;
+import com.coinnect.CoinNect.repositories.ContratanteRepositories;
 import com.coinnect.CoinNect.repositories.ContratoRepositories;
+import com.coinnect.CoinNect.repositories.PrestadorRepositories;
 import com.coinnect.CoinNect.services.ContratoServices;
 
 @Service
@@ -17,23 +22,41 @@ public class ContratoServicesImpl implements ContratoServices {
 
 	@Autowired
 	private ContratoRepositories contratoRepository;
-	
-	//A IMPLEMENTAR REPOSITORIOS DE PRESTADORES, CONTRATANTES
-	
+
+	@Autowired
+	private PrestadorRepositories prestadorRepository;
+
+	@Autowired
+	private ContratanteRepositories contratanteRepository;
+
 	@Override
 	public ContratoDTO criarNovoContrato(ContratoDTO contratoNovo) {
-		// TODO Auto-generated method stub
-		return null;
+		var novo = MyMapper.parseObject(contratoNovo, Contrato.class);
+		if (novo != null) {
+			return MyMapper.parseObject(contratoRepository.save(novo), ContratoDTO.class);
+		}
+		throw new ResourceNotFoundException(
+				"Não foi possivel criar um novo contrato, revise os dados e tente novamente!");
 	}
 
 	@Override
 	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) {
-		// TODO Auto-generated method stub
-		return null;
+		var contrato = MyMapper.parseObject(ofertaContrato, Contrato.class);
+		var prestador = prestadorRepository.findById(prestadorId).orElseThrow(
+				() -> new ResourceNotFoundException("Prestador de serviço não encontrado com ID" + prestadorId));
+
+		if (contrato != null) {
+			contrato.setPrestador(prestador);
+			contrato.setStatus(StatusContrato.OFERTADO);
+			contrato.setDataCriacao(LocalDate.now());
+			contratoRepository.save(contrato);
+			return MyMapper.parseObject(contrato, ContratoDTO.class);
+
+		} throw new ResourceNotFoundException("Não foi possivel criar contrato, verifique os dados e tnte novamente!");
 	}
 
 	@Override
-	public ContratoDTO aceitarContrato(Long contratanteId, Long prestadorId, Long contratoId) {
+	public ContratoDTO aceitarContrato(Long contratoId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -41,7 +64,7 @@ public class ContratoServicesImpl implements ContratoServices {
 	@Override
 	public void negarContrato(Long contratanteId, Long prestadorId, Long contratoId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -66,7 +89,7 @@ public class ContratoServicesImpl implements ContratoServices {
 	@Override
 	public void deletarContrato(Long contratoId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -114,7 +137,7 @@ public class ContratoServicesImpl implements ContratoServices {
 	@Override
 	public void cancelarContrato(Long contratoId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
