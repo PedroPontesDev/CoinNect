@@ -57,8 +57,14 @@ public class ContratoServicesImpl implements ContratoServices {
 
 	@Override
 	public ContratoDTO aceitarContrato(Long contratoId) {
-		// TODO Auto-generated method stub
-		return null;
+		var contrato = contratoRepository.findById(contratoId);
+		Contrato contratoEntity = contrato.get();
+		
+		if(contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null && 
+				contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
+			contratoEntity.setStatus(StatusContrato.ACEITO);
+			return MyMapper.parseObject(contratoRepository.save(contratoEntity), ContratoDTO.class);
+		} throw new ResourceNotFoundException(null);
 	}
 
 	@Override
