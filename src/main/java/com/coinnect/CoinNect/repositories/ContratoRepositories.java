@@ -16,6 +16,6 @@ public interface ContratoRepositories extends JpaRepository<Contrato, Long> {
 			+ "AND c.dataTermino BETWEEN :inicio AND :termino")
 	Set<Contrato> findByDataInicioAndDataTermino(LocalDate inicio, LocalDate termino);
 	
-	
-	Set<Contrato> findByValorMaximo(@Param("valor") BigDecimal valor);
+	@Query("SELECT c FROM Contrato c WHRE c.valor >= :valorMinimo ORDER BY c.valor DESC")
+	Set<Contrato> findByValorMaximo(@Param("valor") BigDecimal valorMinimo);
 }

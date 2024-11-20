@@ -2,6 +2,7 @@ package com.coinnect.CoinNect.services.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -114,6 +115,14 @@ public class ContratoServicesImpl implements ContratoServices {
 		throw new ContratoCannotBeCreatedException("Contrato não pôde ser formalizado pois o contrato não foi ofertado");
 	}
 
+	@Override
+	public void deletarContrato(Long contratoId) {
+		var contrato = contratoRepository.findById(contratoId)
+										  .orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId));
+		contratoRepository.delete(contrato);
+	
+	}
+	
 	/* Metodos a partir daqui serão processados no banco de dados!
 
 	 Metodo de analise de proposta deve ser criado deixando em analise por no maximo DOIS DIAS */
@@ -130,17 +139,14 @@ public class ContratoServicesImpl implements ContratoServices {
 	}
 
 	@Override
-	public Set<ContratoDTO> procurarContratosMaisCaros(BigDecimal valor) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<ContratoDTO> procurarContratosMaisCaros(BigDecimal minimo) {
+		var ordenados = contratoRepository.findByValorMaximo(minimo)
+											.stream()
+											.map(c -> MyMapper.parseObject(c, ContratoDTO.class))
+											.collect(Collectors.toSet());
+		return ordenados;
 	}
 
-	
-	@Override
-	public void deletarContrato(Long contratoId) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public List<ContratoDTO> procurarContratosPorStatus(StatusContrato status) {
