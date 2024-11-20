@@ -64,13 +64,19 @@ public class ContratoServicesImpl implements ContratoServices {
 				contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
 			contratoEntity.setStatus(StatusContrato.ACEITO);
 			return MyMapper.parseObject(contratoRepository.save(contratoEntity), ContratoDTO.class);
-		} throw new ResourceNotFoundException(null);
+		} throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
 	}
 
 	@Override
 	public void negarContrato(Long contratanteId, Long prestadorId, Long contratoId) {
-		// TODO Auto-generated method stub
-
+		var contrato = contratoRepository.findById(contratoId);
+		Contrato contratoEntity = contrato.get();
+		
+		if(contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null && 
+				contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
+			contratoEntity.setStatus(StatusContrato.NEGADO);
+			contratoRepository.save(contratoEntity);
+		} throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
 	}
 
 	@Override
@@ -79,6 +85,8 @@ public class ContratoServicesImpl implements ContratoServices {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//Metodos a partir daqui serão processados no banco de dados!
 
 	@Override
 	public ContratoDTO procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino) {

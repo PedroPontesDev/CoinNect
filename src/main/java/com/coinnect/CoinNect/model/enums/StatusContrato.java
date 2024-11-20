@@ -6,7 +6,7 @@ public enum StatusContrato {
 	INATIVO,
 	OFERTADO,
 	CANCELADO,
-	PENDENTE,
+	NEGADO,
 	ACEITO;
 
 }
