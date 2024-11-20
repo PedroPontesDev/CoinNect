@@ -3,10 +3,13 @@ package com.coinnect.CoinNect.services.impl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coinnect.CoinNect.exceptions.ContratoCannotBeCreatedException;
 import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.model.entities.Contrato;
@@ -52,54 +55,87 @@ public class ContratoServicesImpl implements ContratoServices {
 			contratoRepository.save(contrato);
 			return MyMapper.parseObject(contrato, ContratoDTO.class);
 
-		} throw new ResourceNotFoundException("Não foi possivel criar contrato, verifique os dados e tnte novamente!");
+		}
+		throw new ResourceNotFoundException("Não foi possivel criar contrato, verifique os dados e tnte novamente!");
 	}
 
 	@Override
 	public ContratoDTO aceitarContrato(Long contratoId) {
 		var contrato = contratoRepository.findById(contratoId);
 		Contrato contratoEntity = contrato.get();
-		
-		if(contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null && 
-				contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
+
+		if (contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null
+				&& contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
 			contratoEntity.setStatus(StatusContrato.ACEITO);
 			return MyMapper.parseObject(contratoRepository.save(contratoEntity), ContratoDTO.class);
-		} throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
+		}
+		throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
 	}
 
 	@Override
 	public void negarContrato(Long contratanteId, Long prestadorId, Long contratoId) {
 		var contrato = contratoRepository.findById(contratoId);
 		Contrato contratoEntity = contrato.get();
-		
-		if(contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null && 
-				contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
+
+		if (contratoEntity.getContratante() != null && contratoEntity.getPrestador() != null
+				&& contratoEntity.getStatus().equals(StatusContrato.OFERTADO)) {
 			contratoEntity.setStatus(StatusContrato.NEGADO);
 			contratoRepository.save(contratoEntity);
-		} throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
+		}
+		throw new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId);
 	}
 
 	@Override
 	public ContratoDTO formalizarContrato(Long contratanteId, Long prestadorId, Long contratoId,
 			String assinaturaPrestador, String assinaturaContratante) {
+		var contratante = contratanteRepository.findById(contratanteId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com ID" + contratanteId));
+		var prestador = prestadorRepository.findById(prestadorId)
+				.orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID" + prestadorId));
+		var contrato = contratoRepository.findById(contratoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId));
+
+		if (contrato.getStatus().equals(StatusContrato.OFERTADO)) {
+			if (assinaturaPrestador == null || assinaturaContratante == null) {
+				throw new ContratoCannotBeCreatedException(
+						"Ambas as assinaturas são necessárias para formalizar o contrato.");
+			}
+			
+			contrato.setAssinaturaContratante(assinaturaContratante);
+			contrato.setAssinaturaPrestador(assinaturaPrestador);
+			contrato.setDataInicio(LocalDate.now());
+			contrato.setPrestador(prestador);
+			contrato.setContratante(contratante);
+			contrato.setStatus(StatusContrato.ATIVO);
+			contratoRepository.save(contrato);
+			return MyMapper.parseObject(contrato, ContratoDTO.class);
+
+		}
+		throw new ContratoCannotBeCreatedException("Contrato não pôde ser formalizado pois o contrato não foi ofertado");
+	}
+
+	/* Metodos a partir daqui serão processados no banco de dados!
+
+	 Metodo de analise de proposta deve ser criado deixando em analise por no maximo DOIS DIAS */
+
+	@Override
+	public Set<ContratoDTO> procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino) {
+		var query = contratoRepository.findByDataInicioAndDataTermino(dataInicio, dataTermino);
+		
+		return query.
+					stream()
+					.map(c -> MyMapper.parseObject(c, ContratoDTO.class))
+					.collect(Collectors.toSet());
+		
+	}
+
+	@Override
+	public Set<ContratoDTO> procurarContratosMaisCaros(BigDecimal valor) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
-	//Metodos a partir daqui serão processados no banco de dados!
-
-	@Override
-	public ContratoDTO procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ContratoDTO procurarContratosMaisCaros(BigDecimal valor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public void deletarContrato(Long contratoId) {
 		// TODO Auto-generated method stub
@@ -159,5 +195,6 @@ public class ContratoServicesImpl implements ContratoServices {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

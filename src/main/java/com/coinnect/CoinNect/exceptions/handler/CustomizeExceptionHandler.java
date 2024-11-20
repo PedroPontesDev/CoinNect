@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.coinnect.CoinNect.exceptions.ContratoCannotBeCreatedException;
 import com.coinnect.CoinNect.exceptions.ExceptionResponse;
 import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
+import com.coinnect.CoinNect.exceptions.UnsoportedEvaluationException;
 
 @ControllerAdvice
 @RestController
@@ -36,5 +38,19 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(ContratoCannotBeCreatedException.class)
+	public final ResponseEntity<ExceptionResponse> handleContratoCannotBeCreateExceptio(ContratoCannotBeCreatedException ex , WebRequest request) {
+		ExceptionResponse exResponse = new ExceptionResponse(new Date(), 
+				ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(exResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(UnsoportedEvaluationException.class)
+	public final ResponseEntity<ExceptionResponse> handleEvaluationUnsuportedExceptio(UnsoportedEvaluationException ex , WebRequest request) {
+		ExceptionResponse exResponse = new ExceptionResponse(new Date(), 
+				ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(exResponse, HttpStatus.BAD_REQUEST);
+	}
+	
 
 }
