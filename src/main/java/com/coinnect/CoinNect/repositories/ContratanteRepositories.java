@@ -10,7 +10,7 @@ import com.coinnect.CoinNect.model.entities.Contratante;
 
 public interface ContratanteRepositories extends JpaRepository<Contratante, Long> {
 
-	@Query("SELECT c Contratante c WHERE c.endereco.rua = :rua AND c.endereco.numero = :numero ")
-	Optional<Contratante> findByEndereco(@Param("rua") String rua, @Param("numero") Integer numero);
+	@Query("SELECT c FROM Contratante c JOIN c.usuario u WHERE u.endereco.rua = :rua AND u.endereco.numero = :numero")
+	Contratante findByEndereco(@Param("rua") String rua, @Param("numero") Integer numero);
 	
 }

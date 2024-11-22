@@ -19,14 +19,15 @@ public interface ContratoServices {
 	Set<ContratoDTO> procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino);
 	Set<ContratoDTO> procurarContratosMaisCaros(BigDecimal valor);
 	void deletarContrato(Long contratoId);
-	List<ContratoDTO> procurarContratosPorStatus(StatusContrato status);
+	List<ContratoDTO> procurarContratosPorStatus(String status);
 	boolean verificarExistenciaContrato(Long contratanteId, Long prestadorId);
-	ContratoDTO atualizarContrato(Long contratoId, BigDecimal novoValor, String novosTermos);
+	ContratoDTO atualizarTermosContrato(Long contratoId, BigDecimal novoValor, String novosTermos);
 	List<ContratoDTO> procurarContratosVencidos();
 	List<ContratoDTO> procurarContratosPendentesDeAssinatura();
 	BigDecimal calcularTotalContratos(Long contratanteId);
 	ContratoDTO renovarContrato(Long contratoId, LocalDate novaDataTermino);
 	void cancelarContrato(Long contratoId);
 	List<ContratoDTO> procurarHistoricoAlteracoes(Long contratoId);
+
 
 }

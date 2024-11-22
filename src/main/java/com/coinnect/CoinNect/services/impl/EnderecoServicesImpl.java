@@ -101,9 +101,9 @@ public class EnderecoServicesImpl implements EnderecoServices {
 
 	@Override
 	public ContratanteDTO findContratanteByEndereco(String rua, Integer numero) {
-		Optional<Contratante> contratante = contratanteRepository.findByEndereco(rua, numero);
-		if(contratante.isPresent()) {
-			var contratanteEntity = contratante.get();
+		var contratante = contratanteRepository.findByEndereco(rua, numero);
+		if(contratante != null) {
+			var contratanteEntity = contratante;
 			return MyMapper.parseObject(contratanteEntity, ContratanteDTO.class);
 		} throw new ResourceNotFoundException("Não foi possivel localizar nenhum contrantate neste endereco!");
 	}

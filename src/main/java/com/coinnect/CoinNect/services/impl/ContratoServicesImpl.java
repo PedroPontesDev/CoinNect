@@ -45,11 +45,16 @@ public class ContratoServicesImpl implements ContratoServices {
 
 	@Override
 	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) {
+		
+		// Implementar ainda o contratante que estiver logado no contexto de segurança e associalo ao contrato
+		var contratante = contratanteRepository.findById(ofertaContrato.getContratanteId()).orElseThrow(
+				() -> new ResourceNotFoundException("Contratante não encontrado com ID" + ofertaContrato.getContratanteId()));
 		var contrato = MyMapper.parseObject(ofertaContrato, Contrato.class);
 		var prestador = prestadorRepository.findById(prestadorId).orElseThrow(
 				() -> new ResourceNotFoundException("Prestador de serviço não encontrado com ID" + prestadorId));
 
 		if (contrato != null) {
+			contrato.setContratante(contratante);
 			contrato.setPrestador(prestador);
 			contrato.setStatus(StatusContrato.OFERTADO);
 			contrato.setDataCriacao(LocalDate.now());
@@ -149,21 +154,37 @@ public class ContratoServicesImpl implements ContratoServices {
 
 
 	@Override
-	public List<ContratoDTO> procurarContratosPorStatus(StatusContrato status) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ContratoDTO> procurarContratosPorStatus(String status) {
+	    if (status == null || status.isEmpty()) {
+	        throw new ResourceNotFoundException("O valor não pode ser nulo ou vazio!");
+	    }
+		try {
+			StatusContrato statusContrato = StatusContrato.valueOf(status.toUpperCase());
+			
+			return contratoRepository.findByStatus(statusContrato)
+					.stream()
+					.map(c -> MyMapper.parseObject(c, ContratoDTO.class))
+					.collect(Collectors.toList());
+		} catch(IllegalArgumentException e) {
+			throw new ResourceNotFoundException("Status não encontrado: " + status);
+		}
+		
+		
 	}
 
 	@Override
 	public boolean verificarExistenciaContrato(Long contratanteId, Long prestadorId) {
-		// TODO Auto-generated method stub
-		return false;
+		var contratoExiste = contratoRepository.verificarContratoExiste(contratanteId, prestadorId);
+		if(contratoExiste) return true;
+		throw new ResourceNotFoundException("Contrato inexistente verifique os dados e tente novamente!");
 	}
 
 	@Override
-	public ContratoDTO atualizarContrato(Long contratoId, BigDecimal novoValor, String novosTermos) {
-		// TODO Auto-generated method stub
-		return null;
+	public ContratoDTO atualizarTermosContrato(Long contratoId, BigDecimal novoValor, String novosTermos) {
+		var contrato = contratoRepository.findById(contratoId);
+		if(contrato.isPresent()) {
+			
+		} throw new ResourceNotFoundException("Não foi possivel atualizar o contrato de ID " + contratoId + ", verifique os dados e tente novamente!");
 	}
 
 	@Override
