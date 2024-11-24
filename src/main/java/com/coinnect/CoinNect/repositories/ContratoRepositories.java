@@ -14,8 +14,9 @@ import com.coinnect.CoinNect.model.enums.StatusContrato;
 
 public interface ContratoRepositories extends JpaRepository<Contrato, Long> {
     
-	@Query("SELECT COUNT(c) > 0 THEN TRUE ELSE FALSE END FROM Contrato c WHERE c.contrate.id = :contratanteId AND c.prestador.id = :prestadorId")
-	boolean verificarContratoExiste(Long contratanteId, Long prestadorId);
+	@Query("SELECT COUNT(c) > 0 FROM Contrato c WHERE c.contratante.id = :contratanteId AND c.prestador.id = :prestadorId")
+	boolean verificarContratoExiste(@Param("contratanteId") Long contratanteId, 
+									@Param("prestadorId") Long prestadorId);
 	
     @Query("SELECT c FROM Contrato c WHERE c.status = :status")
     List<Contrato> findByStatus(@Param("status") StatusContrato status);

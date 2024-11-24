@@ -101,7 +101,7 @@ public class EnderecoServicesImpl implements EnderecoServices {
 
 	@Override
 	public ContratanteDTO findContratanteByEndereco(String rua, Integer numero) {
-		var contratante = contratanteRepository.findByEndereco(rua, numero);
+		var contratante = contratanteRepository;
 		if(contratante != null) {
 			var contratanteEntity = contratante;
 			return MyMapper.parseObject(contratanteEntity, ContratanteDTO.class);

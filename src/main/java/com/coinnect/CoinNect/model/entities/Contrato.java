@@ -57,6 +57,26 @@ public class Contrato implements Serializable {
 
 	private BigDecimal valor;
 
+	boolean foiFinalizado;
+
+	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataCriacao, LocalDate dataInicio,
+			LocalDate dataTermino, StatusContrato status, Contratante contratante, Prestador prestador,
+			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor, boolean foiFinalizado) {
+		this.id = id;
+		this.conteudo = conteudo;
+		this.clausulasEspecificas = clausulasEspecificas;
+		this.dataCriacao = dataCriacao;
+		this.dataInicio = dataInicio;
+		this.dataTermino = dataTermino;
+		this.status = status;
+		this.contratante = contratante;
+		this.prestador = prestador;
+		this.assinaturaPrestador = assinaturaPrestador;
+		this.assinaturaContratante = assinaturaContratante;
+		this.valor = valor;
+		this.foiFinalizado = foiFinalizado;
+	}
+
 	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataCriacao, LocalDate dataInicio,
 			LocalDate dataTermino, StatusContrato status, Contratante contratante, Prestador prestador,
 			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor) {
@@ -177,6 +197,14 @@ public class Contrato implements Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public boolean isFoiFinalizado() {
+		return foiFinalizado;
+	}
+
+	public void setFoiFinalizado(boolean foiFinalizado) {
+		this.foiFinalizado = foiFinalizado;
 	}
 
 	@Override
