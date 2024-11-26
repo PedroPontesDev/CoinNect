@@ -9,52 +9,43 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_perfil_contratantes")
+@Table(name = "tb_")
 public class PerfilContratante extends Perfil {
 
 	@Lob
 	private String biografia;
-	
+
 	@Enumerated(EnumType.STRING)
-	private TipoDeServico intresseDeVagasEmServicos;
-	
-	
-	
-	public PerfilContratante(String profilePicUrl, Usuario usuario, String biografia,
-			TipoDeServico intresseDeVagasEmServicos) {
-		super(profilePicUrl, usuario);
+	private TipoDeServico servicosEmInteresee;
+
+	public PerfilContratante(String profilePicurl, String desciption, String biografia) {
+		super(profilePicurl, desciption);
 		this.biografia = biografia;
-		this.intresseDeVagasEmServicos = intresseDeVagasEmServicos;
 	}
 
-	@Override
-	public String getProfilePicUrl() {
-		// TODO Auto-generated method stub
-		return super.getProfilePicUrl();
+	public PerfilContratante() {
+
 	}
 
-	@Override
-	public void setProfilePicUrl(String profilePicUrl) {
-		// TODO Auto-generated method stub
-		super.setProfilePicUrl(profilePicUrl);
+	public String getBiografia() {
+		return biografia;
 	}
 
-	@Override
-	public Usuario getUsuario() {
-		// TODO Auto-generated method stub
-		return super.getUsuario();
+	public void setBiografia(String biografia) {
+		this.biografia = biografia;
 	}
 
-	@Override
-	public void setUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		super.setUsuario(usuario);
+	public TipoDeServico getServicosEmInteresee() {
+		return servicosEmInteresee;
+	}
+
+	public void setServicosEmInteresee(TipoDeServico servicosEmInteresee) {
+		this.servicosEmInteresee = servicosEmInteresee;
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return "PerfilContratante [biografia=" + biografia + "]";
 	}
 
 }

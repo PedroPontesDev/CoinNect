@@ -1,6 +1,5 @@
 package com.coinnect.CoinNect.model.entities;
 
-java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;

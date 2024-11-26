@@ -1,8 +1,11 @@
 package com.coinnect.CoinNect.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,18 +13,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
+import com.coinnect.CoinNect.services.impl.ContratoServicesImpl;
 
 @RestController
-@RequestMapping(path = "/api/contratante/v1")
+@RequestMapping(path = "/v1/api/contrante/")
 public class ContratanteController {
 
 	@Autowired
 	private ContratanteServicesImpl contratanteServices;
-	
+
+	@Autowired
+	private ContratoServicesImpl contratoServices;
+
 	@PostMapping(path = "/registrar-cnpj")
-	public ResponseEntity<ContratanteDTO> registrarContratantePorCnpj(@RequestBody ContratanteDTO contratante) throws Exception {
+	public ResponseEntity<ContratanteDTO> registrarContratantePorCnpj(@RequestBody ContratanteDTO contratante)
+			throws Exception {
 		ContratanteDTO novo = contratanteServices.registrarContrantePorCnpj(contratante);
 		return new ResponseEntity<>(novo, HttpStatus.OK);
 	}
-	
+
+	@GetMapping(name = "/download/{idContrato}", produces = "application/pdf")
+	ResponseEntity<byte[]> gerarContratoSeFormalizado(@PathVariable Long idContrato) {
+		byte[] pdf = contratoServices.gerarContratoFormalizadoPDF(idContrato);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contrato_" + idContrato + ".pdf");
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(pdf);
+	}
 }

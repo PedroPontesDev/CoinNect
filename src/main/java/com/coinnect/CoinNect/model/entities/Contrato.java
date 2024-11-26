@@ -57,11 +57,11 @@ public class Contrato implements Serializable {
 
 	private BigDecimal valor;
 
-	boolean foiFinalizado;
+	private boolean foiFormalizado;
 
 	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataCriacao, LocalDate dataInicio,
 			LocalDate dataTermino, StatusContrato status, Contratante contratante, Prestador prestador,
-			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor, boolean foiFinalizado) {
+			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor, boolean foiFormalizado) {
 		this.id = id;
 		this.conteudo = conteudo;
 		this.clausulasEspecificas = clausulasEspecificas;
@@ -74,24 +74,15 @@ public class Contrato implements Serializable {
 		this.assinaturaPrestador = assinaturaPrestador;
 		this.assinaturaContratante = assinaturaContratante;
 		this.valor = valor;
-		this.foiFinalizado = foiFinalizado;
+		this.foiFormalizado = foiFormalizado;
 	}
 
-	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataCriacao, LocalDate dataInicio,
-			LocalDate dataTermino, StatusContrato status, Contratante contratante, Prestador prestador,
-			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor) {
-		this.id = id;
-		this.conteudo = conteudo;
-		this.clausulasEspecificas = clausulasEspecificas;
-		this.dataCriacao = dataCriacao;
-		this.dataInicio = dataInicio;
-		this.dataTermino = dataTermino;
-		this.status = status;
-		this.contratante = contratante;
-		this.prestador = prestador;
-		this.assinaturaPrestador = assinaturaPrestador;
-		this.assinaturaContratante = assinaturaContratante;
-		this.valor = valor;
+	public boolean isFoiFormalizado() {
+		return foiFormalizado;
+	}
+
+	public void setFoiFormalizado(boolean foiFormalizado) {
+		this.foiFormalizado = foiFormalizado;
 	}
 
 	public Contrato() {
@@ -166,6 +157,14 @@ public class Contrato implements Serializable {
 		return prestador;
 	}
 
+	public boolean foiFormalizado() {
+		return foiFormalizado;
+	}
+	
+	public void foiFormalizado(boolean foiFormalizado) {
+		this.foiFormalizado = foiFormalizado;
+	}
+	
 	public void setPrestador(Prestador prestador) {
 		this.prestador = prestador;
 	}
@@ -199,13 +198,6 @@ public class Contrato implements Serializable {
 		return Objects.hash(id);
 	}
 
-	public boolean isFoiFinalizado() {
-		return foiFinalizado;
-	}
-
-	public void setFoiFinalizado(boolean foiFinalizado) {
-		this.foiFinalizado = foiFinalizado;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -219,6 +211,8 @@ public class Contrato implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
+	
+	
 	@Override
 	public String toString() {
 		return "Contrato [id=" + id + ", conteudo=" + conteudo + ", clausulasEspecificas=" + clausulasEspecificas

@@ -17,40 +17,50 @@ public class PerfilPrestador extends Perfil {
 
 	@Enumerated(EnumType.STRING)
 	private TipoDeServico servicoOferecido;
+
+	public PerfilPrestador(String profilePicurl, String desciption, String biografia, TipoDeServico servicoOferecido) {
+		super(profilePicurl, desciption);
+		this.biografia = biografia;
+		this.servicoOferecido = servicoOferecido;
+	}
+
 	
-	public PerfilPrestador(String profilePicUrl, Usuario usuario, String biografia) {
-		super(profilePicUrl, usuario);
+
+	public String getBiografia() {
+		return biografia;
+	}
+
+
+
+	public void setBiografia(String biografia) {
 		this.biografia = biografia;
 	}
 
-	@Override
-	public String getProfilePicUrl() {
-		// TODO Auto-generated method stub
-		return super.getProfilePicUrl();
+
+
+	public TipoDeServico getServicoOferecido() {
+		return servicoOferecido;
 	}
 
-	@Override
-	public void setProfilePicUrl(String profilePicUrl) {
-		// TODO Auto-generated method stub
-		super.setProfilePicUrl(profilePicUrl);
+
+
+	public void setServicoOferecido(TipoDeServico servicoOferecido) {
+		this.servicoOferecido = servicoOferecido;
 	}
 
-	@Override
-	public Usuario getUsuario() {
-		// TODO Auto-generated method stub
-		return super.getUsuario();
-	}
 
-	@Override
-	public void setUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		super.setUsuario(usuario);
-	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return "PerfilPrestador [biografia=" + biografia + ", servicoOferecido=" + servicoOferecido
+				+ ", getProfilePicUrl()=" + getProfilePicUrl() + ", getDescription()=" + getDescription()
+				+ ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ "]";
 	}
+
+
+
+	
+	
 
 }

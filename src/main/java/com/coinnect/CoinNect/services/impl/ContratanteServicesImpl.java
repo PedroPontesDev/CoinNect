@@ -68,23 +68,22 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	public ContratoDTO oferecerContratoPrestador(ContratoDTO ofertaContrato, Long prestadorId) throws Exception {
 		Contrato novoContrato = MyMapper.parseObject(ofertaContrato, Contrato.class);
 		Prestador prestador = prestadorRepository.findById(prestadorId)
-												 .orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID" + prestadorId));
-		if(novoContrato != null) {
+				.orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID" + prestadorId));
+		if (novoContrato != null) {
 			novoContrato.setStatus(StatusContrato.OFERTADO);
 			novoContrato.setPrestador(prestador);
 			return MyMapper.parseObject(novoContrato, ContratoDTO.class);
 		} else {
 			throw new Exception("Erro ao criar contrato, verifique os dados fornecidos.");
 		}
-		
+
 	}
 
 	@Override
 	public List<ContratanteDTO> listarContrantesBemAvaliados() {
-		var bemAvaliados = contratanteRepository.findAll()
-												.stream()
-												.sorted(Comparator.comparingDouble(c -> ((Contratante) c).getAvalicao()).reversed())
-												.collect(Collectors.toList()); //Depois trocar por algum algoritmo como QuickSort ou usar JPQL
+		var bemAvaliados = contratanteRepository.findAll().stream()
+				.sorted(Comparator.comparingDouble(c -> ((Contratante) c).getAvalicao()).reversed())
+				.collect(Collectors.toList()); // Depois trocar por algum algoritmo como QuickSort ou usar JPQL
 		return MyMapper.parseListObjects(bemAvaliados, ContratanteDTO.class);
 	}
 
@@ -92,11 +91,13 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	public ContratoDTO visualizarContratosProprios(Long contratoId, Long contratanteId) throws Exception {
 		var contrato = contratoRepository.findById(contratoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com o ID" + contratoId));
-		
-		var contratante = contratanteRepository.findById(contratanteId)
-				.orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com o ID" + contratanteId));;
-		
-		if(contrato.getContratante().equals(contratante)) return MyMapper.parseObject(contrato, ContratoDTO.class);
+
+		var contratante = contratanteRepository.findById(contratanteId).orElseThrow(
+				() -> new ResourceNotFoundException("Contratante não encontrado com o ID" + contratanteId));
+		;
+
+		if (contrato.getContratante().equals(contratante))
+			return MyMapper.parseObject(contrato, ContratoDTO.class);
 		else {
 			throw new Exception("Este contrato não pertence ao contratante fornecido.");
 		}
@@ -104,16 +105,18 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	}
 
 	@Override
-	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) { //Depois implementar um sistema mais robusto de avaliações criando entidade no BD chamada tb_avaliacoes
+	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) { // Depois implementar um sistema mais
+																				// robusto de avaliações criando
+																				// entidade no BD chamada tb_avaliacoes
 		var contratante = contratanteRepository.findById(contratanteId)
-											   .orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID" + contratanteId));
-		
-		if(nota > contratante.getAVALICAO_MAXIMA() && nota < 0.0) {
+				.orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID" + contratanteId));
+
+		if (nota > contratante.getAVALICAO_MAXIMA() && nota < 0.0) {
 			throw new UnsoportedEvaluationException("Nota deve ser igual ou menor que 5.0");
 		}
-		
+
 		Double novaMedia;
-		if(contratante.getAvalicao() == null) {
+		if (contratante.getAvalicao() == null) {
 			novaMedia = nota;
 		} else {
 			novaMedia = (contratante.getAvalicao() + nota) / 2;
@@ -121,18 +124,17 @@ public class ContratanteServicesImpl implements ContratanteServices {
 			contratanteRepository.save(contratante);
 		}
 		return novaMedia;
-		
+
 	}
 
 	public Set<ContratoDTO> verTodosContratos(Long contratanteId) {
 		var contratante = contratanteRepository.findById(contratanteId).orElseThrow(
 				() -> new ResourceNotFoundException("Contratante não encontrado com o ID" + contratanteId));
-		if (contratante.getContratos().isEmpty()) throw new ResourceNotFoundException("Você não tem contratos para visualizar!");
-		
-		 return contratante.getContratos()
-					.stream()
-					.map(contratos -> MyMapper.parseObject(contratos, ContratoDTO.class))
-					.collect(Collectors.toSet());
+		if (contratante.getContratos().isEmpty())
+			throw new ResourceNotFoundException("Você não tem contratos para visualizar!");
+
+		return contratante.getContratos().stream().map(contratos -> MyMapper.parseObject(contratos, ContratoDTO.class))
+				.collect(Collectors.toSet());
 	}
 
 	@Override
@@ -156,20 +158,21 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	@Override
 	public List<ContratoDTO> visualizarContratosAtivos(Long contratanteId) {
 		var contratante = contratanteRepository.findById(contratanteId)
-											   .orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com ID" + contratanteId));
-		
+				.orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com ID" + contratanteId));
+
 		List<ContratoDTO> contratosAtivos = new ArrayList<>();
-		
-		for(Contrato contrato : contratante.getContratos()) {
-			if(contrato.getStatus() == StatusContrato.ATIVO) {
+
+		for (Contrato contrato : contratante.getContratos()) {
+			if (contrato.getStatus() == StatusContrato.ATIVO) {
 				contratosAtivos.add(MyMapper.parseObject(contrato, ContratoDTO.class));
 			}
 		}
-		
-		if(contratosAtivos.isEmpty()) {
-		    throw new ResourceNotFoundException("Nenhum contrato ativo encontrado para este contratante.");
-		} return contratosAtivos;
-	
+
+		if (contratosAtivos.isEmpty()) {
+			throw new ResourceNotFoundException("Nenhum contrato ativo encontrado para este contratante.");
+		}
+		return contratosAtivos;
+
 	}
 
 }

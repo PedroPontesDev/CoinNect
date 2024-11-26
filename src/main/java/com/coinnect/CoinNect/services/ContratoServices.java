@@ -28,6 +28,6 @@ public interface ContratoServices {
 	ContratoDTO renovarContrato(Long contratoId, LocalDate novaDataTermino);
 	void cancelarContrato(Long contratoId);
 	List<ContratoDTO> procurarHistoricoAlteracoes(Long contratoId);
-
+	byte[] gerarContratoFormalizadoPDF(Long contratoId);
 
 }

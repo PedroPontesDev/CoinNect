@@ -12,13 +12,11 @@ public abstract class Perfil {
 	@Column
 	private String profilePicUrl;
 
-	@OneToOne
-	@JoinColumn(name = "usuario_id") // Esta coluna estará na tabela 'Usuario'
-	private Usuario usuario;
+	private String description;
 
-	public Perfil(String profilePicUrl, Usuario usuario) {
+	public Perfil(String profilePicUrl, String description) {
 		this.profilePicUrl = profilePicUrl;
-		this.usuario = usuario;
+		this.description = description;
 	}
 
 	public Perfil() {
@@ -29,21 +27,21 @@ public abstract class Perfil {
 		return profilePicUrl;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void setProfilePicUrl(String profilePicUrl) {
 		this.profilePicUrl = profilePicUrl;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	@Override
 	public String toString() {
-		return "Perfil [profilePicUrl=" + profilePicUrl + ", usuario=" + usuario + "]";
+		return "Perfil [profilePicUrl=" + profilePicUrl + "]";
 	}
 
 }
