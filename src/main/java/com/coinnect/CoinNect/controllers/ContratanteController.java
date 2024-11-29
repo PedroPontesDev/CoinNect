@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
+import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
 import com.coinnect.CoinNect.services.impl.ContratoServicesImpl;
 
@@ -42,5 +43,10 @@ public class ContratanteController {
 		return ResponseEntity.ok()
 				.headers(headers)
 				.body(pdf);
+	}
+	
+	@PostMapping
+	public ContratoDTO ofereconCOntratoaPrestador(Long prestadorId) {
+		return null;
 	}
 }

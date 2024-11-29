@@ -1,6 +1,5 @@
 package com.coinnect.CoinNect.services.impl;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ContratoServicesImpl implements ContratoServices {
 	private ContratanteRepositories contratanteRepository;
 
 	@Autowired
-	PdfGenerator pdfGen;
+	private PdfGenerator pdfGen;
 
 	@Override
 	public ContratoDTO criarNovoContrato(ContratoDTO contratoNovo) {
@@ -239,11 +238,14 @@ public class ContratoServicesImpl implements ContratoServices {
 	public byte[] gerarContratoFormalizadoPDF(Long contratoId) {
 		var contrato = contratoRepository.findById(contratoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado" + contratoId));
-		try {
-			return pdfGen.gerarPedfSeFormalizado(contrato);
-		} catch (ContratoCannotBeCreatedException e) {
-			throw new ContratoCannotBeCreatedException("Contrato não pode ser gerado");
-		}
+		if(contrato.foiFormalizado()) {
+			try {
+				return pdfGen.gerarPedfSeFormalizado(contrato);
+			} catch (ContratoCannotBeCreatedException e) {
+				throw new ContratoCannotBeCreatedException("Contrato não pode ser gerado");
+			}	
+		} throw new ContratoCannotBeCreatedException("Contrato não foi formalizado ainda!");
+		
 	}
 
 }
