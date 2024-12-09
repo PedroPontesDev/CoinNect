@@ -5,12 +5,19 @@ import com.coinnect.CoinNect.model.enums.TipoDeServico;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_perfil_contratantes")
 public class PerfilPrestador extends Perfil {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Lob
 	private String biografia;
@@ -40,11 +47,17 @@ public class PerfilPrestador extends Perfil {
 		this.servicoOferecido = servicoOferecido;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "PerfilPrestador [biografia=" + biografia + ", servicoOferecido=" + servicoOferecido
-				+ ", getProfilePicUrl()=" + getProfilePicUrl() + ", getDescription()=" + getDescription()
-				+ ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+		return "PerfilPrestador [id=" + id + ", biografia=" + biografia + ", servicoOferecido=" + servicoOferecido
 				+ "]";
 	}
 

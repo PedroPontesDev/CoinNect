@@ -31,11 +31,14 @@ public class Contratante extends Usuario {
 
 	@OneToMany(mappedBy = "contratante")
 	private Set<Contrato> contratos = new HashSet<>();
-	
-	
+
+	@OneToOne
+	private Perfil perfil;
+
 	public Contratante(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
-			String cpf, String cnpj, Double avalicao, Set<Contrato> contratos) {
-		super(id, firstName, lastName, email, telephone, endereco);
+			String username, String password, Perfil perfil, String cpf, String cnpj, Double avalicao,
+			Set<Contrato> contratos) {
+		super(id, firstName, lastName, email, telephone, endereco, username, password, perfil);
 		this.cpf = cpf;
 		this.cnpj = cnpj;
 		this.avalicao = avalicao;
@@ -68,6 +71,14 @@ public class Contratante extends Usuario {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	@Override

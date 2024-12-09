@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -22,9 +23,9 @@ public class Prestador extends Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "cpf_prestador") 
+	@Column(name = "cpf_prestador")
 	private String cpf;
-	
+
 	@Transient
 	private final Double AVALICAO_MAXIMA = 5.0;
 
@@ -33,16 +34,21 @@ public class Prestador extends Usuario {
 	@OneToMany(mappedBy = "prestador")
 	private Set<Contrato> contratos = new HashSet<>();
 
+	@OneToOne
+	private Perfil perfil;
+
 	public Prestador(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
-			String cpf, Double avalicao, Set<Contrato> contratos) {
-		super(id, firstName, lastName, email, telephone, endereco);
+			String username, String password, Perfil perfil, Long id2, String cpf, Double avalicao,
+			Set<Contrato> contratos) {
+		super(id, firstName, lastName, email, telephone, endereco, username, password, perfil);
 		this.cpf = cpf;
 		this.avalicao = avalicao;
 		this.contratos = contratos;
+		this.perfil = perfil;
 	}
-	
+
 	public Prestador() {
-		
+
 	}
 
 	@Override
@@ -189,12 +195,14 @@ public class Prestador extends Usuario {
 		return AVALICAO_MAXIMA;
 	}
 
+	
+	
 	@Override
 	public String toString() {
 		return "Prestador [id=" + id + ", cpf=" + cpf + ", AVALICAO_MAXIMA=" + AVALICAO_MAXIMA + ", avalicao="
-				+ avalicao + ", contratos=" + contratos + "]";
+				+ avalicao + ", contratos=" + contratos + ", perfil=" + perfil + "]";
 	}
 
 	
-
+	
 }

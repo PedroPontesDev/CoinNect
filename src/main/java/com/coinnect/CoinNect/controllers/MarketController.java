@@ -12,16 +12,9 @@ import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
 
 @RestController
-@RequestMapping(path = "/api/contratante/v1")
+@RequestMapping(path = "/v1/market")
 public class MarketController {
 
-	@Autowired
-	private ContratanteServicesImpl contratanteServices;
-	
-	@PostMapping(path = "/registrar-cnpj")
-	public ResponseEntity<ContratanteDTO> registrarContratantePorCnpj(@RequestBody ContratanteDTO contratante) throws Exception {
-		ContratanteDTO novo = contratanteServices.registrarContrantePorCnpj(contratante);
-		return new ResponseEntity<>(novo, HttpStatus.OK);
-	}
+	//IMPLEMENTAR FUNÇÕES DE ENCONTRAR CONTRATANTES PROXIMOS E FAZER OS TRADES
 	
 }

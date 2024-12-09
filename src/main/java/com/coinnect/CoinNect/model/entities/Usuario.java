@@ -41,31 +41,34 @@ public abstract class Usuario {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id")
 	private Endereco endereco;
-	
-    @Column(nullable = false, unique = true)
-    private String username;
 
-    @Column(nullable = false)
-    private String password;
+	@Column(nullable = false, unique = true)
+	private String username;
 
-    // Relacionamento com o perfil (um usuário pode ter um perfil)
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private Perfil perfil;
+	@Column(nullable = false)
+	private String password;
 
+	// Relacionamento com o perfil (um usuário pode ter um perfil)
+	@OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	private Perfil perfil;
 
-	public Usuario(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco) {
+	public Usuario(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
+			String username, String password, Perfil perfil) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.telephone = telephone;
 		this.endereco = endereco;
+		this.username = username;
+		this.password = password;
+		this.perfil = perfil;
 	}
 
 	public Usuario() {
-		
+
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}

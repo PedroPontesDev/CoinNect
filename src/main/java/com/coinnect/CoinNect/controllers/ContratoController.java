@@ -12,7 +12,7 @@ import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
 import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
 
 @RestController
-@RequestMapping(path = "v1/api/contrato")
+@RequestMapping(path = "/v1/contrato")
 public class ContratoController {
 
 

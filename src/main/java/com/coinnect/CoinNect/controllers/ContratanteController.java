@@ -17,7 +17,7 @@ import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
 import com.coinnect.CoinNect.services.impl.ContratoServicesImpl;
 
 @RestController
-@RequestMapping(path = "/v1/api/contrante/")
+@RequestMapping(path = "/v1/contrante")
 public class ContratanteController {
 
 	@Autowired
@@ -46,7 +46,7 @@ public class ContratanteController {
 	}
 	
 	@PostMapping
-	public ContratoDTO ofereconCOntratoaPrestador(Long prestadorId) {
+	public ContratoDTO oferecerContratoPrestador(Long prestadorId) {
 		return null;
 	}
 }

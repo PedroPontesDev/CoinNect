@@ -234,7 +234,7 @@ public class ContratoServicesImpl implements ContratoServices {
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado" + contratoId));
 		if (contrato.foiFormalizado()) {
 			try {
-				return pdfGen.gerarPedfSeFormalizado(contrato);
+				return pdfGen.gerarPdfSeFormalizado(contrato);
 			} catch (ContratoCannotBeCreatedException e) {
 				throw new ContratoCannotBeCreatedException("Contrato não pode ser gerado");
 			}

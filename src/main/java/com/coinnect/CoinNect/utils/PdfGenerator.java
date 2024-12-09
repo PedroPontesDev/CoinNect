@@ -12,7 +12,7 @@ import com.itextpdf.layout.element.Paragraph;
 
 public class PdfGenerator {
 
-	public byte[] gerarPedfSeFormalizado(Contrato contrato)  {
+	public byte[] gerarPdfSeFormalizado(Contrato contrato)  {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) { // BAOS transforma uma strem de saida para
 			if(!contrato.foiFormalizado()) throw new ContratoCannotBeCreatedException("Contrato não foi fomralizado, frmalize-o e tnete novamente!");																// bytes de array
 			PdfWriter pdfWriter = new PdfWriter(baos);

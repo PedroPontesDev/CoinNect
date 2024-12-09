@@ -1,7 +1,7 @@
-cors:
-  originPatterns:
-    - http://localhost:8080
-    - http://localhost:3000
+server:
+  port: 8080
+  servlet:
+    context-path: /v1/api
 
 spring:
   datasource:
@@ -17,11 +17,19 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
 
-receitaws:
-  token: ${RECEITAWS_TOKEN}
+  doc:
+    api-docs:
+      path: /v1/api-docs
+    swagger-ui:
+      path: /v1/swagger-ui.html
 
-spring-doc:
-  pathsToMatch: 
-    - /api/**/v1/**
-  swagger-ui:
-    use-root-path: true
+cors:
+  origin-patterns:
+    - http://localhost:8080
+    - http://localhost:3000
+
+receitaws:
+  token: ${RECEITAWS_TOKEN}  
+
+openroute:
+  api-key: ${OPENROUTE_API_KEY}  
