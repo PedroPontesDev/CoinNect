@@ -24,31 +24,21 @@ public class PerfilPrestador extends Perfil {
 		this.servicoOferecido = servicoOferecido;
 	}
 
-	
-
 	public String getBiografia() {
 		return biografia;
 	}
-
-
 
 	public void setBiografia(String biografia) {
 		this.biografia = biografia;
 	}
 
-
-
 	public TipoDeServico getServicoOferecido() {
 		return servicoOferecido;
 	}
 
-
-
 	public void setServicoOferecido(TipoDeServico servicoOferecido) {
 		this.servicoOferecido = servicoOferecido;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -57,10 +47,5 @@ public class PerfilPrestador extends Perfil {
 				+ ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
 				+ "]";
 	}
-
-
-
-	
-	
 
 }

@@ -59,6 +59,7 @@ public class ContratoServicesImpl implements ContratoServices {
 				() -> new ResourceNotFoundException("Prestador de serviço não encontrado com ID" + prestadorId));
 
 		if (contrato != null) {
+			contrato.setConteudo(ofertaContrato.getConteudo());
 			contrato.setContratante(contratante);
 			contrato.setPrestador(prestador);
 			contrato.setStatus(StatusContrato.OFERTADO);
@@ -212,7 +213,6 @@ public class ContratoServicesImpl implements ContratoServices {
 
 	@Override
 	public BigDecimal calcularTotalContratos(Long contratanteId) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -229,23 +229,43 @@ public class ContratoServicesImpl implements ContratoServices {
 	}
 
 	@Override
-	public List<ContratoDTO> procurarHistoricoAlteracoes(Long contratoId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public byte[] gerarContratoFormalizadoPDF(Long contratoId) {
 		var contrato = contratoRepository.findById(contratoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado" + contratoId));
-		if(contrato.foiFormalizado()) {
+		if (contrato.foiFormalizado()) {
 			try {
 				return pdfGen.gerarPedfSeFormalizado(contrato);
 			} catch (ContratoCannotBeCreatedException e) {
 				throw new ContratoCannotBeCreatedException("Contrato não pode ser gerado");
-			}	
-		} throw new ContratoCannotBeCreatedException("Contrato não foi formalizado ainda!");
-		
+			}
+		}
+		throw new ContratoCannotBeCreatedException("Contrato não foi formalizado ainda!");
+
+	}
+
+	@Override
+	public void inativarContaratoSeFormalizado(Long contratoId, String status) {
+		Contrato contrato = contratoRepository.findById(contratoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contraato não encontrado"));
+		try {
+			StatusContrato statusContrato = StatusContrato.valueOf(status.toUpperCase());
+
+			if (contrato.getStatus().equals(StatusContrato.ATIVO) && contrato.foiFormalizado()) {
+				if (statusContrato == StatusContrato.INATIVO) {
+					contrato.setStatus(statusContrato);
+					contratoRepository.save(contrato);
+				} else {
+					throw new IllegalArgumentException("\"O status fornecido não é válido para inativação.\"");
+				}
+			} else {
+				throw new ResourceNotFoundException(
+						"Contrato não pode ser inativado pois não está ativo ou não foi formalizado.");
+			}
+
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Status invalido para a operação do contrato com ID " + contratoId);
+		}
+
 	}
 
 }

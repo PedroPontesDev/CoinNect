@@ -16,11 +16,13 @@ public class PerfilContratante extends Perfil {
 	private String biografia;
 
 	@Enumerated(EnumType.STRING)
-	private TipoDeServico servicosEmInteresee;
+	private TipoDeServico servicosEmInteresse;
 
-	public PerfilContratante(String profilePicurl, String desciption, String biografia) {
-		super(profilePicurl, desciption);
+	public PerfilContratante(String profilePicUrl, String description, String biografia,
+			TipoDeServico servicosEmInteresse) {
+		super(profilePicUrl, description);
 		this.biografia = biografia;
+		this.servicosEmInteresse = servicosEmInteresse;
 	}
 
 	public PerfilContratante() {
@@ -36,11 +38,11 @@ public class PerfilContratante extends Perfil {
 	}
 
 	public TipoDeServico getServicosEmInteresee() {
-		return servicosEmInteresee;
+		return servicosEmInteresse;
 	}
 
-	public void setServicosEmInteresee(TipoDeServico servicosEmInteresee) {
-		this.servicosEmInteresee = servicosEmInteresee;
+	public void setServicosEmInteresee(TipoDeServico servicosEmInteresse) {
+		this.servicosEmInteresse = servicosEmInteresse;
 	}
 
 	@Override

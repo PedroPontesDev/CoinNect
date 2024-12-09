@@ -22,7 +22,7 @@ public class Prestador extends Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "cpf_prestador") //Utilizar API pra confirmar se CPF é real na receita
+	@Column(name = "cpf_prestador") 
 	private String cpf;
 	
 	@Transient

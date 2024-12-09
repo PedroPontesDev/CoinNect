@@ -49,7 +49,7 @@ public abstract class Usuario {
     private String password;
 
     // Relacionamento com o perfil (um usuário pode ter um perfil)
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Perfil perfil;
 
 

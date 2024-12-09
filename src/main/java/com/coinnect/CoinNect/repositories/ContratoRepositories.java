@@ -28,4 +28,6 @@ public interface ContratoRepositories extends JpaRepository<Contrato, Long> {
     
     @Query("SELECT c FROM Contrato c WHERE c.valor >= :valorMinimo ORDER BY c.valor DESC")
     Set<Contrato> findByValorMaximo(@Param("valorMinimo") BigDecimal valorMinimo);
+
+
 }

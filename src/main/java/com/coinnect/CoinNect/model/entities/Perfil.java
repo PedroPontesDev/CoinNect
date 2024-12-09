@@ -9,7 +9,6 @@ import jakarta.persistence.OneToOne;
 @MappedSuperclass
 public abstract class Perfil {
 
-	@Column
 	private String profilePicUrl;
 
 	private String description;

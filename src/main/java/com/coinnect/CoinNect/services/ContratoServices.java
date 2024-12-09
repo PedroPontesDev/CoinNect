@@ -16,6 +16,7 @@ public interface ContratoServices {
 	void negarContrato(Long contratanteId, Long prestadorId, Long contratoId);
 	ContratoDTO formalizarContrato(Long contratanteId, Long prestadorId, Long contratoId, String assinaturaPrestador,
 			String assinaturaContratante);
+	void inativarContaratoSeFormalizado(Long contratoId, String status);
 	Set<ContratoDTO> procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino);
 	Set<ContratoDTO> procurarContratosMaisCaros(BigDecimal valor);
 	void deletarContrato(Long contratoId);
@@ -27,7 +28,6 @@ public interface ContratoServices {
 	BigDecimal calcularTotalContratos(Long contratanteId);
 	ContratoDTO renovarContrato(Long contratoId, LocalDate novaDataTermino);
 	void cancelarContrato(Long contratoId);
-	List<ContratoDTO> procurarHistoricoAlteracoes(Long contratoId);
 	byte[] gerarContratoFormalizadoPDF(Long contratoId);
 
 }
