@@ -37,12 +37,7 @@ public class ContratanteDTO {
     @NotBlank(message = "O campo CNPJ é obrigatório.")
     @Pattern(regexp = "\\d{14}", message = "O CNPJ deve conter 14 dígitos.")
     private String cnpj;
-
-    // Construtor vazio
-    public ContratanteDTO() {
-    }
-
-    // Construtor com todos os campos
+    
     public ContratanteDTO(Long id, String firstName, String lastName, String email, String telephone,
                           EnderecoDTO endereco, String cpf, String cnpj) {
         this.id = id;
@@ -53,6 +48,9 @@ public class ContratanteDTO {
         this.endereco = endereco;
         this.cpf = cpf;
         this.cnpj = cnpj;
+    }
+    
+    public ContratanteDTO() {
     }
 
     // Getters e Setters

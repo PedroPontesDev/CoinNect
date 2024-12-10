@@ -33,7 +33,7 @@ public class ContratanteController {
 		return new ResponseEntity<>(novo, HttpStatus.OK);
 	}
 
-	@GetMapping(name = "/download/{idContrato}", produces = "application/pdf")
+	@GetMapping(path = "/download/{idContrato}", produces = "application/pdf")
 	ResponseEntity<byte[]> gerarContratoSeFormalizado(@PathVariable Long idContrato) {
 		byte[] pdf = contratoServices.gerarContratoFormalizadoPDF(idContrato);
 
