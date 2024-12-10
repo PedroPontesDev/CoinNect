@@ -1,20 +1,33 @@
 package com.coinnect.CoinNect.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coinnect.CoinNect.model.dtos.ContratanteDTO;
-import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
+import com.coinnect.CoinNect.services.EnderecoServices;
 
 @RestController
 @RequestMapping(path = "/v1/market")
 public class MarketController {
 
-	//IMPLEMENTAR FUNÇÕES DE ENCONTRAR CONTRATANTES PROXIMOS E FAZER OS TRADES
+	@Autowired
+	private EnderecoServices enderecoServices;
 	
+	@GetMapping(path = "/ver-proximidade")
+	public ResponseEntity<Map<String, Object>> getDistance(@RequestParam Long contratanteId, @RequestParam Long prestadorId) throws Exception {
+		double distance = enderecoServices.calcularDistanciaEntreUsuarios(prestadorId, contratanteId);
+		
+		Map<String, Object> response = Map.of("prestadorId:", prestadorId, 
+											  "contratanteId:", contratanteId,
+											  "distanceInKm:", distance);
+		
+		if(response.isEmpty()) throw new Exception("Distância não pode ser calculada!");
+		
+		return ResponseEntity.ok(response);
+	}
 }

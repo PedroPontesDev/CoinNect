@@ -2,6 +2,7 @@ package com.coinnect.CoinNect.model.entities;
 
 import com.coinnect.CoinNect.model.enums.TipoDeServico;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,6 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_perfil_contratantes")
+@DiscriminatorValue("PERFIL_PRESTADOR")
 public class PerfilPrestador extends Perfil {
 
 	@Id

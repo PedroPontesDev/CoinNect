@@ -17,7 +17,7 @@ import com.coinnect.CoinNect.services.impl.ContratanteServicesImpl;
 import com.coinnect.CoinNect.services.impl.ContratoServicesImpl;
 
 @RestController
-@RequestMapping(path = "/v1/contrante")
+@RequestMapping(path = "/v1/contratante")
 public class ContratanteController {
 
 	@Autowired

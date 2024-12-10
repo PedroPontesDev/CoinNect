@@ -10,10 +10,10 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TIPO_PERFIL")
 @Table(name = "tb_perfil")
 public abstract class Perfil {
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

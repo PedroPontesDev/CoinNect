@@ -2,6 +2,8 @@ package com.coinnect.CoinNect.utils;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Service;
+
 import com.coinnect.CoinNect.exceptions.ContratoCannotBeCreatedException;
 import com.coinnect.CoinNect.model.entities.Contrato;
 import com.itextpdf.io.source.ByteArrayOutputStream;
@@ -10,11 +12,12 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 
+@Service
 public class PdfGenerator {
 
 	public byte[] gerarPdfSeFormalizado(Contrato contrato)  {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) { // BAOS transforma uma strem de saida para
-			if(!contrato.foiFormalizado()) throw new ContratoCannotBeCreatedException("Contrato não foi fomralizado, frmalize-o e tnete novamente!");																// bytes de array
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) { // BAOS transforma uma strem de saida para bytes de array
+			if(!contrato.foiFormalizado()) throw new ContratoCannotBeCreatedException("Contrato não foi fomralizado, frmalize-o e tnete novamente!");																
 			PdfWriter pdfWriter = new PdfWriter(baos);
 			Document doc = new Document(new PdfDocument(pdfWriter));
 

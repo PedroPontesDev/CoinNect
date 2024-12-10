@@ -3,6 +3,7 @@ package com.coinnect.CoinNect.model.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class Contratante extends Usuario {
 	@OneToMany(mappedBy = "contratante")
 	private Set<Contrato> contratos = new HashSet<>();
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Perfil perfil;
 
 	public Contratante(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,

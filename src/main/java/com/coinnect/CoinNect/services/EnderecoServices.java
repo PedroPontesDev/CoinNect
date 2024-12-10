@@ -8,12 +8,7 @@ public interface EnderecoServices {
 	EnderecoDTO registrarNovoEndereco(EnderecoDTO novoEndereco);
 	EnderecoDTO atualizarEnderecoExistente(EnderecoDTO update, Long enderecoExistente);
 	void deletarEnderecoExistente(Long idEndereco);
-	
-
-
-
-	//Algumas funçoes daqui sera utilizadas APIS de GeoDistance e Açguns Algortimos
-
+	double calcularDistanciaEntreUsuarios(Long prestadorId, Long contratanteId);
 	
 	
 }

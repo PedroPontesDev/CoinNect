@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /v1/api
+    context-path: /v1
 
 spring:
   datasource:
@@ -32,4 +32,4 @@ receitaws:
   token: ${RECEITAWS_TOKEN}  
 
 openroute:
-  api-key: ${OPENROUTE_API_KEY}  
+  api-key: ${OPENROUTE_API_KEY}
