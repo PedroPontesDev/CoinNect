@@ -2,6 +2,7 @@ package com.coinnect.CoinNect.services.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -136,12 +137,29 @@ public class ContratoServicesImpl implements ContratoServices {
 
 	}
 
-	/*
-	 * Metodos a partir daqui serão processados no banco de dados!
-	 * 
-	 * Metodo de analise de proposta deve ser criado deixando em analise por no
-	 * maximo DOIS DIAS
-	 */
+	// Metodos a partir daqui serão processados no banco de dados!
+
+	public void deixarEmAnaliseDuranteDoisDias(Long contratoId) {
+		Contrato contrato = contratoRepository.findById(contratoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId));
+		if (contrato.getStatus().equals(StatusContrato.OFERTADO)) {
+
+			var dataInicio = contrato.getDataCriacao();
+			var dataHoje = LocalDate.now();
+
+			long diferenca = ChronoUnit.DAYS.between(dataInicio, dataHoje);
+
+			if (diferenca >= 2) {
+
+			} else {
+				
+			}
+
+		} else {
+			throw new ContratoCannotBeCreatedException(null);
+		}
+
+	}
 
 	@Override
 	public Set<ContratoDTO> procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino) {

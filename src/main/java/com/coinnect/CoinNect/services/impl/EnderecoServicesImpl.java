@@ -48,7 +48,7 @@ public class EnderecoServicesImpl implements EnderecoServices {
 
 	@Override
 	public double calcularDistanciaEntreUsuarios(Long prestadorId, Long contratanteId) {
-        Prestador prestador = prestadorRepository.findById(prestadorId)
+        Contratante prestador = contratanteRepository.findById(prestadorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID: " + prestadorId));
         Contratante contratante = contratanteRepository.findById(contratanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Contratante não encontrado com ID: " + contratanteId));

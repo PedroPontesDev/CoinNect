@@ -26,7 +26,7 @@ public class MarketController {
 											  "contratanteId:", contratanteId,
 											  "distanceInKm:", distance);
 		
-		if(response.isEmpty()) throw new Exception("Distância não pode ser calculada!");
+		if(distance <= 0) throw new Exception("Distância não pode ser calculada!");
 		
 		return ResponseEntity.ok(response);
 	}

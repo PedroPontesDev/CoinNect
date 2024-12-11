@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContratanteDTO {
-	
+
     private Long id;
 
     @NotBlank(message = "O primeiro nome é obrigatório.")
@@ -37,9 +37,17 @@ public class ContratanteDTO {
     @NotBlank(message = "O campo CNPJ é obrigatório.")
     @Pattern(regexp = "\\d{14}", message = "O CNPJ deve conter 14 dígitos.")
     private String cnpj;
-    
-    public ContratanteDTO(Long id, String firstName, String lastName, String email, String telephone,
-                          EnderecoDTO endereco, String cpf, String cnpj) {
+
+    @NotBlank(message = "O campo password é obrigatório.")
+    private String password;
+
+    private String username;
+
+    public ContratanteDTO() {
+    }
+
+    public ContratanteDTO(Long id, String firstName, String lastName, String email, String telephone, EnderecoDTO endereco,
+            String cpf, String cnpj, String password, String username) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,9 +56,8 @@ public class ContratanteDTO {
         this.endereco = endereco;
         this.cpf = cpf;
         this.cnpj = cnpj;
-    }
-    
-    public ContratanteDTO() {
+        this.password = password;
+        this.username = username;
     }
 
     // Getters e Setters
@@ -60,6 +67,14 @@ public class ContratanteDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -118,6 +133,14 @@ public class ContratanteDTO {
         this.cnpj = cnpj;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     // hashCode, equals e toString
     @Override
     public int hashCode() {
@@ -126,25 +149,18 @@ public class ContratanteDTO {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         ContratanteDTO that = (ContratanteDTO) obj;
-        return Objects.equals(id, that.id) &&
-               Objects.equals(cpf, that.cpf) &&
-               Objects.equals(cnpj, that.cnpj);
+        return Objects.equals(id, that.id) && Objects.equals(cpf, that.cpf) && Objects.equals(cnpj, that.cnpj);
     }
 
     @Override
     public String toString() {
-        return "ContratanteDTO{" +
-               "id=" + id +
-               ", firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", email='" + email + '\'' +
-               ", telephone='" + telephone + '\'' +
-               ", endereco=" + endereco +
-               ", cpf='" + cpf + '\'' +
-               ", cnpj='" + cnpj + '\'' +
-               '}';
+        return "ContratanteDTO{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+                + ", email='" + email + '\'' + ", telephone='" + telephone + '\'' + ", endereco=" + endereco + ", cpf='"
+                + cpf + '\'' + ", cnpj='" + cnpj + '\'' + '}';
     }
 }
