@@ -1,6 +1,7 @@
 package com.coinnect.CoinNect.services.impl;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.coinnect.CoinNect.exceptions.ContratoCannotBeCreatedException;
 import com.coinnect.CoinNect.exceptions.ResourceNotFoundException;
 import com.coinnect.CoinNect.model.dtos.ContratoDTO;
 import com.coinnect.CoinNect.model.entities.Contrato;
+import com.coinnect.CoinNect.model.entities.Prestador;
 import com.coinnect.CoinNect.model.enums.StatusContrato;
 import com.coinnect.CoinNect.model.mapper.MyMapper;
 import com.coinnect.CoinNect.repositories.ContratanteRepositories;
@@ -109,9 +111,13 @@ public class ContratoServicesImpl implements ContratoServices {
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId));
 
 		if (contrato.getStatus().equals(StatusContrato.OFERTADO)) {
+			
+			if(contrato.getStatus().equals(StatusContrato.INATIVO)) {
+				throw new ContratoCannotBeCreatedException("Contrato já se encontrato com o Status = " + StatusContrato.valueOf("INATIVO"));
+			}
+			
 			if (assinaturaPrestador == null || assinaturaContratante == null) {
-				throw new ContratoCannotBeCreatedException(
-						"Ambas as assinaturas são necessárias para formalizar o contrato.");
+				throw new ContratoCannotBeCreatedException("Ambas as assinaturas são necessárias para formalizar o contrato.");
 			}
 
 			contrato.setAssinaturaContratante(assinaturaContratante);
@@ -136,30 +142,37 @@ public class ContratoServicesImpl implements ContratoServices {
 		contratoRepository.delete(contrato);
 
 	}
-
-	// Metodos a partir daqui serão processados no banco de dados!
-
-	public void deixarEmAnaliseDuranteDoisDias(Long contratoId) {
+	// Metodo deixar em analise, apos ser diexado em analise sera criada uma regra de negocio onde a analise durara
+	// Apenas dois dias, durante periodo de analise podera ser aceito ou negado, apos os dois dias contrato vira inativo
+	public void deixarEmAnaliseSePrestadorExistir(Long contratoId, Long prestadorId) {
 		Contrato contrato = contratoRepository.findById(contratoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contrato não encontrado com ID" + contratoId));
-		if (contrato.getStatus().equals(StatusContrato.OFERTADO)) {
-
-			var dataInicio = contrato.getDataCriacao();
-			var dataHoje = LocalDate.now();
-
-			long diferenca = ChronoUnit.DAYS.between(dataInicio, dataHoje);
-
-			if (diferenca >= 2) {
-
+		Prestador prestadorNoContrato = prestadorRepository.findById(prestadorId)
+														   .orElseThrow(() -> new ResourceNotFoundException("Prestador não encontrado com ID" + prestadorId));
+		 // Verifica se o prestador está associado ao contrato
+	    if (!contrato.getPrestador().equals(prestadorNoContrato)) {
+	        throw new ContratoCannotBeCreatedException("O prestador informado não está associado ao contrato.");
+	    }
+	    // Verifica se o contrato está no status OFERTADO e se nao excede o tempo limite para deixar em analise
+		if(contrato.getStatus().equals(StatusContrato.OFERTADO)) {
+			long diasAnalise  = ChronoUnit.DAYS.between(contrato.getDataCriacao(), LocalDate.now());
+			if(diasAnalise >= 2) {
+				contrato.setStatus(StatusContrato.INATIVO);
+				contratoRepository.save(contrato);
 			} else {
-				
+				contrato.setStatus(StatusContrato.EM_ANALISE);
+				contrato.setDataInicioAnalaise(LocalDate.now().atStartOfDay().toLocalDate());
+				contrato.setEntrouEmAnalise(true);
+				throw new ContratoCannotBeCreatedException("Ambas as assinaturas são necessárias para formalizar o contrato.");
 			}
-
-		} else {
-			throw new ContratoCannotBeCreatedException(null);
+				throw new ContratoCannotBeCreatedException("Contrato não pode ser colocado em análise, pois não está no status OFERTADO.\"");
+			
 		}
-
+		
 	}
+
+	// Metodos a partir daqui serão processados no banco de dados!
+	
 
 	@Override
 	public Set<ContratoDTO> procurarContratoPorData(LocalDate dataInicio, LocalDate dataTermino) {

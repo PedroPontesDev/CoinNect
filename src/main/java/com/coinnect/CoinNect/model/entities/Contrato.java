@@ -34,6 +34,7 @@ public class Contrato implements Serializable {
 	@Lob
 	private String clausulasEspecificas;
 
+	private LocalDate dataInicioAnalaise;
 	private LocalDate dataCriacao;
 	private LocalDate dataInicio;
 	private LocalDate dataTermino;
@@ -59,12 +60,16 @@ public class Contrato implements Serializable {
 
 	private boolean foiFormalizado;
 
-	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataCriacao, LocalDate dataInicio,
-			LocalDate dataTermino, StatusContrato status, Contratante contratante, Prestador prestador,
-			String assinaturaPrestador, String assinaturaContratante, BigDecimal valor, boolean foiFormalizado) {
+	private boolean entrouEmAnalise;
+
+	public Contrato(Long id, String conteudo, String clausulasEspecificas, LocalDate dataInicioAnalaise,
+			LocalDate dataCriacao, LocalDate dataInicio, LocalDate dataTermino, StatusContrato status,
+			Contratante contratante, Prestador prestador, String assinaturaPrestador, String assinaturaContratante,
+			BigDecimal valor, boolean foiFormalizado, boolean entrouEmAnalise) {
 		this.id = id;
 		this.conteudo = conteudo;
 		this.clausulasEspecificas = clausulasEspecificas;
+		this.dataInicioAnalaise = dataInicioAnalaise;
 		this.dataCriacao = dataCriacao;
 		this.dataInicio = dataInicio;
 		this.dataTermino = dataTermino;
@@ -75,6 +80,7 @@ public class Contrato implements Serializable {
 		this.assinaturaContratante = assinaturaContratante;
 		this.valor = valor;
 		this.foiFormalizado = foiFormalizado;
+		this.entrouEmAnalise = entrouEmAnalise;
 	}
 
 	public Contrato() {
@@ -191,6 +197,23 @@ public class Contrato implements Serializable {
 
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
+	}
+	
+
+	public LocalDate getDataInicioAnalaise() {
+		return dataInicioAnalaise;
+	}
+
+	public void setDataInicioAnalaise(LocalDate dataInicioAnalaise) {
+		this.dataInicioAnalaise = dataInicioAnalaise;
+	}
+
+	public boolean isEntrouEmAnalise() {
+		return entrouEmAnalise;
+	}
+
+	public void setEntrouEmAnalise(boolean entrouEmAnalise) {
+		this.entrouEmAnalise = entrouEmAnalise;
 	}
 
 	@Override

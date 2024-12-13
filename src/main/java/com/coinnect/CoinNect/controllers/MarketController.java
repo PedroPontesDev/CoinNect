@@ -18,7 +18,7 @@ public class MarketController {
 	@Autowired
 	private EnderecoServices enderecoServices;
 	
-	@GetMapping(path = "/ver-proximidade")
+	@GetMapping(path = "/ver-proximidade") //Aplicar um DTO pra lidar melhor com a reuquest e response
 	public ResponseEntity<Map<String, Object>> getDistance(@RequestParam Long contratanteId, @RequestParam Long prestadorId) throws Exception {
 		double distance = enderecoServices.calcularDistanciaEntreUsuarios(prestadorId, contratanteId);
 		

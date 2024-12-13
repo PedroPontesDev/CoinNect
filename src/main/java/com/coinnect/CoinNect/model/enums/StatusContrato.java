@@ -7,6 +7,7 @@ public enum StatusContrato {
 	OFERTADO,
 	CANCELADO,
 	NEGADO,
-	ACEITO;
+	ACEITO, 
+	EM_ANALISE;
 
 }
