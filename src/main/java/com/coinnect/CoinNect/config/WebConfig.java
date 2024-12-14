@@ -18,12 +18,14 @@ public class WebConfig extends WebMvcConfigurationSupport{
 	@Override //Cpnfigurando ContentNegotiation primeiramente pelo parameter vias query parameter
 	protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		Map<String, MediaType> mediaTypess = Map.of("pdf", MediaType.APPLICATION_PDF,
-												  "xml", MediaType.APPLICATION_XML);
+												  	"xml", MediaType.APPLICATION_XML);
 		
 		configurer.defaultContentType(MediaType.APPLICATION_JSON);
 		configurer.mediaTypes(mediaTypess);
 		configurer.favorParameter(true);
 		configurer.parameterName("mediaType");
+		configurer.ignoreAcceptHeader(true);
+		mediaTypess.forEach(configurer::mediaType);
 	}
 
 	@Override
