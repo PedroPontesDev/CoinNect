@@ -1,5 +1,6 @@
 package com.coinnect.CoinNect.model.entities;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,9 +28,13 @@ public class Prestador extends Usuario {
 	private String cpf;
 
 	@Transient
-	private final Double AVALICAO_MAXIMA = 5.0;
+	private final BigDecimal AVALICAO_MAXIMA = BigDecimal.valueOf(5.0);
 
-	private Double avalicao;
+	@Column(name = "avaliacao", precision = 3, scale = 2)
+	private BigDecimal avalicao;
+
+	@Column(name = "total_avaliacoes", nullable = false)
+	private long totalAvaliacoes = 0; // Contador de avaliações realizadas
 
 	@OneToMany(mappedBy = "prestador")
 	private Set<Contrato> contratos = new HashSet<>();
@@ -38,13 +43,13 @@ public class Prestador extends Usuario {
 	private Perfil perfil;
 
 	public Prestador(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
-			String username, String password, Perfil perfil, Long id2, String cpf, Double avalicao,
+			String username, String password, Perfil perfil, String cpf, BigDecimal avalicao, long totalAvaliacoes,
 			Set<Contrato> contratos) {
 		super(id, firstName, lastName, email, telephone, endereco, username, password, perfil);
 		this.cpf = cpf;
 		this.avalicao = avalicao;
+		this.totalAvaliacoes = totalAvaliacoes;
 		this.contratos = contratos;
-		this.perfil = perfil;
 	}
 
 	public Prestador() {
@@ -175,12 +180,20 @@ public class Prestador extends Usuario {
 		this.cpf = cpf;
 	}
 
-	public Double getAvalicao() {
+	public BigDecimal getAvalicao() {
 		return avalicao;
 	}
 
-	public void setAvalicao(Double avalicao) {
+	public void setAvalicao(BigDecimal avaliacao) {
 		this.avalicao = avalicao;
+	}
+
+	public long getTotalAvaliacoes() {
+		return totalAvaliacoes;
+	}
+
+	public void setTotalAvaliacoes(long totalAvaliacoes) {
+		this.totalAvaliacoes = totalAvaliacoes;
 	}
 
 	public Set<Contrato> getContratos() {
@@ -191,18 +204,14 @@ public class Prestador extends Usuario {
 		this.contratos = contratos;
 	}
 
-	public Double getAVALICAO_MAXIMA() {
+	public BigDecimal getAVALICAO_MAXIMA() {
 		return AVALICAO_MAXIMA;
 	}
 
-	
-	
 	@Override
 	public String toString() {
 		return "Prestador [id=" + id + ", cpf=" + cpf + ", AVALICAO_MAXIMA=" + AVALICAO_MAXIMA + ", avalicao="
 				+ avalicao + ", contratos=" + contratos + ", perfil=" + perfil + "]";
 	}
 
-	
-	
 }

@@ -1,9 +1,11 @@
 package com.coinnect.CoinNect.model.entities;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +28,13 @@ public class Contratante extends Usuario {
 	private String cnpj;
 
 	@Transient
-	private final Double AVALICAO_MAXIMA = 5.0;
+	private final BigDecimal AVALICAO_MAXIMA = BigDecimal.valueOf(5.0);
 
-	private Double avalicao;
+	@Column(name = "avaliacao", precision = 3, scale = 2)
+	private BigDecimal avalicao;
+
+	@Column(name = "total_avaliacoes", nullable = false)
+	private long totalAvaliacoes = 0; // Contador de avaliações realizadas
 
 	@OneToMany(mappedBy = "contratante")
 	private Set<Contrato> contratos = new HashSet<>();
@@ -37,13 +43,14 @@ public class Contratante extends Usuario {
 	private Perfil perfil;
 
 	public Contratante(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
-			String username, String password, Perfil perfil, String cpf, String cnpj, Double avalicao,
-			Set<Contrato> contratos) {
+			String username, String password, Perfil perfil, String cpf, String cnpj, BigDecimal avalicao,
+			Set<Contrato> contratos, Long contadorAvaliacoes) {
 		super(id, firstName, lastName, email, telephone, endereco, username, password, perfil);
 		this.cpf = cpf;
 		this.cnpj = cnpj;
 		this.avalicao = avalicao;
 		this.contratos = contratos;
+		this.totalAvaliacoes = contadorAvaliacoes;
 	}
 
 	public Contratante() {
@@ -162,22 +169,31 @@ public class Contratante extends Usuario {
 		return super.equals(obj);
 	}
 
-	public Double getAVALICAO_MAXIMA() {
+	public BigDecimal getAVALICAO_MAXIMA() {
 		return AVALICAO_MAXIMA;
 	}
 
-	public Double getAvalicao() {
+	public BigDecimal getAvalicao() {
 		return avalicao;
 	}
 
-	public void setAvalicao(Double avalicao) {
+	public void setAvalicao(BigDecimal avalicao) {
 		this.avalicao = avalicao;
+	}
+
+	public long getTotalAvaliacoes() {
+		return totalAvaliacoes;
+	}
+
+	public void setTotalAvaliacoes(long totalAvaliacoes) {
+		this.totalAvaliacoes = totalAvaliacoes;
 	}
 
 	@Override
 	public String toString() {
 		return "Contratante [id=" + id + ", cpf=" + cpf + ", cnpj=" + cnpj + ", AVALICAO_MAXIMA=" + AVALICAO_MAXIMA
-				+ ", avalicao=" + avalicao + ", contratos=" + contratos + "]";
+				+ ", avalicao=" + avalicao + ", totalAvaliacoes=" + totalAvaliacoes + ", contratos=" + contratos
+				+ ", perfil=" + perfil + "]";
 	}
 
 }

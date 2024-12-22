@@ -11,5 +11,5 @@ CREATE TABLE tb_usuarios (
    	TIPO_USUARIO VARCHAR(50) NOT NULL,  -- Para indicar o tipo de usuário (ex: TIPO_PRESTADOR, TIPO_CONTRATANTE)
     CONSTRAINT fk_endereco FOREIGN KEY (endereco_id) REFERENCES tb_enderecos(id),  -- Relacionamento com Endereco
     CONSTRAINT fk_perfil_id FOREIGN KEY (perfil_id) REFERENCES tb_perfil(id),  -- Relacionamento com perfil
-    CONSTRAINT tipo_usuario_check CHECK (tipo_usuario IN ('TIPO_PRESTADOR','TIPO_CONTRATANTE'))  -- Tipos de usuário
+    CONSTRAINT tipo_usuario_check CHECK (tipo_usuario IN ('PRESTADOR_SERVICOS','CONTRATANTE'))  -- Tipos de usuário
 );

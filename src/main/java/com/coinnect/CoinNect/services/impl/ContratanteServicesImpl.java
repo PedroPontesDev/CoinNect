@@ -1,5 +1,7 @@
 package com.coinnect.CoinNect.services.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -82,7 +84,7 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	@Override
 	public List<ContratanteDTO> listarContrantesBemAvaliados() {
 		var bemAvaliados = contratanteRepository.findAll().stream()
-				.sorted(Comparator.comparingDouble(c -> ((Contratante) c).getAvalicao()).reversed())
+				.sorted(Comparator.comparing(c -> ((Contratante) c).getAvalicao()).reversed())
 				.collect(Collectors.toList()); // Depois trocar por algum algoritmo como QuickSort ou usar JPQL
 		return MyMapper.parseListObjects(bemAvaliados, ContratanteDTO.class);
 	}
@@ -105,26 +107,37 @@ public class ContratanteServicesImpl implements ContratanteServices {
 	}
 
 	@Override
-	public Double fazerAvaliacaoContratante(Double nota, Long contratanteId) { // Depois implementar um sistema mais
-																				// robusto de avaliações criando
-																				// entidade no BD chamada tb_avaliacoes
+	public BigDecimal fazerAvaliacaoContratante(Double notaParam, Long contratanteId) {
+		// Busca o contratante no repositório
 		var contratante = contratanteRepository.findById(contratanteId)
-				.orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID" + contratanteId));
+				.orElseThrow(() -> new ResourceNotFoundException("Contratante não localizado com ID " + contratanteId));
 
-		if (nota > contratante.getAVALICAO_MAXIMA() && nota < 0.0) {
-			throw new UnsoportedEvaluationException("Nota deve ser igual ou menor que 5.0");
+		// Validação da nota
+		if (notaParam >= contratante.getAVALICAO_MAXIMA().doubleValue() || notaParam < 0.0) {
+			throw new UnsoportedEvaluationException("Nota deve estar entre 0.0 e " + contratante.getAVALICAO_MAXIMA());
 		}
 
-		Double novaMedia;
+		// Conversão para BigDecimal
+		BigDecimal nota = BigDecimal.valueOf(notaParam);
+		BigDecimal totalAvaliacoes = BigDecimal.valueOf(contratante.getTotalAvaliacoes());
+
+		// Cálculo da nova média
+		BigDecimal novaMedia;
 		if (contratante.getAvalicao() == null) {
-			novaMedia = nota;
-		} else {
-			novaMedia = (contratante.getAvalicao() + nota) / 2;
-			contratante.setAvalicao(novaMedia);
-			contratanteRepository.save(contratante);
-		}
-		return novaMedia;
+			novaMedia = nota; // Primeira avaliação caso nao tenha
 
+		} else {
+			novaMedia = contratante.getAvalicao().multiply(totalAvaliacoes)
+												.add(BigDecimal.valueOf(notaParam))
+												.divide(totalAvaliacoes, RoundingMode.HALF_UP);
+
+		}
+		// Atualiza a avaliação do contratante
+		contratante.setAvalicao(novaMedia);
+		contratante.setTotalAvaliacoes(contratante.getTotalAvaliacoes() + 1);
+		contratanteRepository.save(contratante);
+
+		return novaMedia; // Retorna a nova média calculada
 	}
 
 	public Set<ContratoDTO> verTodosContratos(Long contratanteId) {
