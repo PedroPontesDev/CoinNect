@@ -43,7 +43,11 @@ public class Prestador extends Usuario {
 	private Perfil perfil;
 
 	public Prestador(Long id, String firstName, String lastName, String email, String telephone, Endereco endereco,
+<<<<<<< HEAD
 			String username, String password, Perfil perfil, String cpf, BigDecimal avalicao, long totalAvaliacoes,
+=======
+			String username, String password, Perfil perfil,  String cpf, Double avalicao,
+>>>>>>> f75feb6564e8ee29e2be0e6c876cc150f43bc701
 			Set<Contrato> contratos) {
 		super(id, firstName, lastName, email, telephone, endereco, username, password, perfil);
 		this.cpf = cpf;
